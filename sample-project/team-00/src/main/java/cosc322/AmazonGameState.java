@@ -48,6 +48,24 @@ public class AmazonGameState {
 		//check if legal move, and return false if not?
 		return true;
 	}
+	
+	public boolean applyMove(short[] QCurr, short[]QNew, short[] ANew) {
+		short queenType = board[QCurr[0]][QCurr[1]];
+		board[QCurr[0]][QCurr[1]] = 0;
+		board[QNew[0]][QNew[1]] = queenType;
+		board[ANew[0]][ANew[1]] = 3;
+		
+		int i = blackQueens.indexOf({QCurr[0],QCurr[1]});
+		if(i>=0){
+			blackQueens.set(i, {QNew[0],QNew[1]});
+		}
+		else{
+			i = whiteQueens.indexOf({QCurr[0],QCurr[1]});
+			whiteQueens.set(i, {QNew[0],QNew[1]});
+		}
+		//check if legal move, and return false if not?
+		return true;
+	}
 
 	public ArrayList<short[]> movesFromSpace(short[] startingSpace) {
 
@@ -119,6 +137,18 @@ public class AmazonGameState {
 		System.out.println("Number of moves for this node is: " + moves.size());
 
 		return moves;
+	}
+	
+	public static short[][] deepCloneBoard(short[][] oldBoard) {
+		
+		short[][] result = new short[oldBoard.length][];
+		
+		for(int i = 0; i < oldBoard.length; i ++) {
+			result[i] = oldBoard[i].clone();
+		}
+		
+		
+		return result;
 	}
 
 }
