@@ -26,7 +26,7 @@ public class GameStateNode {
 
 	}
         
-        private void getMinMoves(){
+    private void getMinMoves(){
 		for(short i=0; i<4; i++){
 			expandLeft((short) 0, nodeBoard.blackQueens.get(i), true);
 			expandRight((short) 0, nodeBoard.blackQueens.get(i), true);
@@ -46,6 +46,90 @@ public class GameStateNode {
 			expandDiagLeftUp((short) 0, nodeBoard.whiteQueens.get(i), false);
 			expandDiagLeftDown((short) 0, nodeBoard.whiteQueens.get(i), false);
 		}
+		
+		
+		//for the current min amount of moves, check if there are any empty spaces adjacent to the current move space
+		//if there are empty spaces, expand again in the direction of the empty space, which represents a new move
+		//go until there are no more expansion (no more reachable spaces)
+		boolean expand = false;
+		short level = 1;
+		
+		do{
+		for(short i = 0; i <= 9; i++){
+			for(short j = 0; j <= 9; j++){
+				if(minBlack[i][j]==level){
+					if(nodeBoard.board[i][j-1]==0){
+						expandLeft(level, new short[]{i,j}, true);
+						expand = true;
+					}
+					if(nodeBoard.board[i][j+1]==0){
+						expandRight(level, new short[]{i,j}, true);
+						expand = true;
+					}
+					if(nodeBoard.board[i-1][j]==0){
+						expandDown(level, new short[]{i,j}, true);
+						expand = true;
+					}
+					if(nodeBoard.board[i+1][j]==0){
+						expandUp(level, new short[]{i,j}, true);
+						expand = true;
+					}
+					if(nodeBoard.board[i+1][j+1]==0){
+						expandDiagRightUp(level, new short[]{i,j}, true);
+						expand = true;
+					}
+					if(nodeBoard.board[i-1][j+1]==0){
+						expandDiagRightDown(level, new short[]{i,j}, true);
+						expand = true;
+					}
+					if(nodeBoard.board[i+1][j-1]==0){
+						expandDiagLeftUp(level, new short[]{i,j}, true);
+						expand = true;
+					}
+					if(nodeBoard.board[i-1][j-1]==0){
+						expandDiagLeftDown(level, new short[]{i,j}, true);
+						expand = true;
+					}
+				}
+				
+				if(minWhite[i][j]==level){
+					if(nodeBoard.board[i][j-1]==0){
+						expandLeft(level, new short[]{i,j}, false);
+						expand = true;
+					}
+					if(nodeBoard.board[i][j+1]==0){
+						expandRight(level, new short[]{i,j}, false);
+						expand = true;
+					}
+					if(nodeBoard.board[i-1][j]==0){
+						expandDown(level, new short[]{i,j}, false);
+						expand = true;
+					}
+					if(nodeBoard.board[i+1][j]==0){
+						expandUp(level, new short[]{i,j}, false);
+						expand = true;
+					}
+					if(nodeBoard.board[i+1][j+1]==0){
+						expandDiagRightUp(level, new short[]{i,j}, false);
+						expand = true;
+					}
+					if(nodeBoard.board[i-1][j+1]==0){
+						expandDiagRightDown(level, new short[]{i,j}, false);
+						expand = true;
+					}
+					if(nodeBoard.board[i+1][j-1]==0){
+						expandDiagLeftUp(level, new short[]{i,j}, false);
+						expand = true;
+					}
+					if(nodeBoard.board[i-1][j-1]==0){
+						expandDiagLeftDown(level, new short[]{i,j}, false);
+						expand = true;
+					}
+				}
+			}
+		}
+		level++;
+		}while(expand);
 	}
 	
 	private void expandLeft(short value, short[] position, boolean black){
