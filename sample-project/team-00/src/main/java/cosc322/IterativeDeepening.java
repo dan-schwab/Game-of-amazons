@@ -33,7 +33,8 @@ public class IterativeDeepening {
     }
 
     private void depthSearch(int adjacencyMatrix[][], int source, int goal) {
-        int el, dest = 1;
+        int el;
+        int dest = 1;
         int[] visited = new int[numberOfNodes + 1];
         stack.push(source);
         depth = 0;
@@ -44,7 +45,7 @@ public class IterativeDeepening {
             el = stack.peek();
             while (dest <= numberOfNodes) {
                 if (depth < maxDepth) {
-                    if (adjacencyMatrix[el][dest] == 1) {
+                    if (adjacencyMatrix[el][dest] == 1 && visited[dest] != 1) {
                         stack.push(dest);
                         visited[dest] = 1;
                         System.out.print(dest + "\t");
