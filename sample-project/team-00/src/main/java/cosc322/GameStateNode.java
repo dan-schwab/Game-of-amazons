@@ -182,19 +182,26 @@ public class GameStateNode {
 		ArrayList<GameStateNode> generated = new ArrayList<GameStateNode>();
 		
 		if(asBlack) {
+                    System.out.println("Number of queens for this root node is: " + nodeBoard.blackQueens.size());
 			for(int i = 0; i < nodeBoard.blackQueens.size(); i ++) {
 				
 				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpace(nodeBoard.blackQueens.get(i));
+                                
+                                System.out.println("Number of space moves for queen " + i + " at " + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1] + " is: " + legalQueenMoves.size());
 				
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
 					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpace(legalQueenMoves.get(j));	
 					
+                                        for(int k = 0; k < legalArrowShots.size(); k++) {
+                                            
+                                        
 					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
+                                        newState.applyMove(nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 					
 					GameStateNode newNode = new GameStateNode(newState, turnNumber, asBlack);
 					generated.add(newNode);
 					
-					
+                                }
 				}
 				
 				
@@ -211,20 +218,22 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
 					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpace(legalQueenMoves.get(j));	
 					
+                                        for(int k = 0; k < legalArrowShots.size(); k++) {
+                                            
+                                        
 					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
+                                        newState.applyMove(nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 					
 					GameStateNode newNode = new GameStateNode(newState, turnNumber, asBlack);
 					generated.add(newNode);
 					
-					
+                                }
 				}
-				
-				
-				
 				
 			}
 			
 		}
+                
 		System.out.println("Number of moves for this root node is: " + generated.size());
 		return generated;
 		
