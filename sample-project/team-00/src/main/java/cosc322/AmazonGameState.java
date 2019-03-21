@@ -42,16 +42,16 @@ public class AmazonGameState {
 		board[QCurr.get(0)][QCurr.get(1)] = 0;
 		board[QNew.get(0)][QNew.get(1)] = queenType;
 		board[ANew.get(0)][ANew.get(1)] = 3;
-		/*
-		short i = blackQueens.indexOf({QCurr.get(0),QCurr.get(1)});
+		short[] qnew = new short[]{QNew.get(0).shortValue(),QNew.get(1).shortValue()};
+                
+		int i = blackQueens.indexOf(new int[]{QCurr.get(0),QCurr.get(1)});
 		if(i>=0){
-			blackQueens.set(i, {QNew.get(0),QNew.get(1)});
+			blackQueens.set(i, qnew);
 		}
 		else{
-			i = whiteQueens.indexOf({QCurr.get(0),QCurr.get(1)});
-			whiteQueens.set(i, {QNew.get(0),QNew.get(1)});
+			i = whiteQueens.indexOf(new short[]{QCurr.get(0).shortValue(),QCurr.get(1).shortValue()});
+			whiteQueens.set(i, qnew);
 		}
-*/
 		//check if legal move, and return false if not?
 		return true;
 	}
@@ -61,16 +61,15 @@ public class AmazonGameState {
 		board[QCurr[0]][QCurr[1]] = 0;
 		board[QNew[0]][QNew[1]] = queenType;
 		board[ANew[0]][ANew[1]] = 3;
-		/*
-		int i = blackQueens.indexOf({QCurr[0],QCurr[1]});
+		
+		int i = blackQueens.indexOf(new int[]{QCurr[0],QCurr[1]});
 		if(i>=0){
-			blackQueens.set(i, {QNew[0],QNew[1]});
+			blackQueens.set(i, new short[]{QNew[0],QNew[1]});
 		}
 		else{
-			i = whiteQueens.indexOf({QCurr[0],QCurr[1]});
-			whiteQueens.set(i, {QNew[0],QNew[1]});
-		}
-*/
+			i = whiteQueens.indexOf(new short[]{QCurr[0],QCurr[1]});
+			whiteQueens.set(i, new short[]{QNew[0],QNew[1]});
+                }
 		//check if legal move, and return false if not?
 		return true;
 	}
