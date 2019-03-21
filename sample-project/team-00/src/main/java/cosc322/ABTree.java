@@ -38,11 +38,17 @@ public class ABTree {
 		else {
 			node.value = beta;
 		}
-		
+		return node.value;
 	}
 	
 	public int h_value(GameStateNode node) {
-		
+		return 0;
 	}
+        
+        public int miniMax(GameStateNode node, boolean isMaxPlayer, int alpha, int beta){
+            //if node is leaf: return value of the node
+            int bestVal = 0;
+            return bestVal;
+        }
 	
 }

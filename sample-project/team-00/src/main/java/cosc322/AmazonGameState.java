@@ -21,14 +21,14 @@ public class AmazonGameState {
 	public AmazonGameState(int turnNumber) {
 		this.board = new short[][]{{0,0,0,1,0,1,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,1},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{2,0,0,0,0,0,0,0,0,2},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,2,0,2,0,0,0,0}};
 		this.turnNumber = turnNumber;
-		blackQueens.add({6,0});
-		blackQueens.add({9,3});
-		blackQueens.add({9,6});
-		blackQueens.add({6,9});
-		whiteQueens.add({3,0});
-		whiteQueens.add({0,3});
-		whiteQueens.add({0,6});
-		whiteQueens.add({3,9});
+		blackQueens.add(new short[]{6,0});
+		blackQueens.add(new short[]{9,3});
+		blackQueens.add(new short[]{9,6});
+		blackQueens.add(new short[]{6,9});
+		whiteQueens.add(new short[]{3,0});
+		whiteQueens.add(new short[]{0,3});
+		whiteQueens.add(new short[]{0,6});
+		whiteQueens.add(new short[]{3,9});
 	}
 	
 	
@@ -37,14 +37,15 @@ public class AmazonGameState {
 		board[QCurr.get(0)][QCurr.get(1)] = 0;
 		board[QNew.get(0)][QNew.get(1)] = queenType;
 		board[ANew.get(0)][ANew.get(1)] = 3;
-		
-		int i = blackQueens.indexOf({QCurr.get(0),QCurr.get(1)});
+		short[] qnew = new short[]{QNew.get(0).shortValue(),QNew.get(1).shortValue()};
+                
+		int i = blackQueens.indexOf(new int[]{QCurr.get(0),QCurr.get(1)});
 		if(i>=0){
-			blackQueens.set(i, {QNew.get(0),QNew.get(1)});
+			blackQueens.set(i, qnew);
 		}
 		else{
-			i = whiteQueens.indexOf({QCurr.get(0),QCurr.get(1)});
-			whiteQueens.set(i, {QNew.get(0),QNew.get(1)});
+			i = whiteQueens.indexOf(new short[]{QCurr.get(0).shortValue(),QCurr.get(1).shortValue()});
+			whiteQueens.set(i, qnew);
 		}
 		//check if legal move, and return false if not?
 		return true;
