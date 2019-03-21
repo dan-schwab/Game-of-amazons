@@ -7,15 +7,16 @@ public class GameStateNode {
 	private AmazonGameState nodeBoard;
 	public int value;
 	public int turnNumber;
-	public int player;
+	public boolean asBlack;
 	public ArrayList<GameStateNode> children;
 	public short[][] territory;
 	public short[][] minBlack;
 	public short[][] minWhite;
 	
-	public GameStateNode(AmazonGameState board, int turnNumber) {
+	public GameStateNode(AmazonGameState board, int turnNumber, boolean asBlack) {
 		this.nodeBoard = board;
 		this.turnNumber = turnNumber;
+		this.asBlack = asBlack;
 		this.territory = new short[10][10];
 		this.minBlack = new short[10][10];
 		this.minWhite = new short[10][10];
@@ -173,6 +174,28 @@ public class GameStateNode {
 			}
 			i++;
 		}
+	}
+	
+	
+	public ArrayList(GameStateNode) createChildren(boolean player) {
+		
+		ArrayList<GameStateNode> generated = new ArrayList<GameStateNode>();
+		
+		if(asBlack) {
+			for(int i = 0; i < nodeBoard.blackQueens.length; i ++) {
+				
+				
+				
+				
+				
+			}
+		}
+		else {
+			
+		}
+		
+		
+		
 	}
 
 }

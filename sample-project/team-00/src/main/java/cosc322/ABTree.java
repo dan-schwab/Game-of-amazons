@@ -3,6 +3,8 @@ package cosc322;
 public class ABTree {
 	
 	public GameStateNode rootNode;
+	int depth = 0;
+	ArrayList<GameStateNode> searchSpace = new ArrayList<GameStateNode>();
 	
 	
 	public ABTree(GameStateNode root) {
@@ -21,7 +23,7 @@ public class ABTree {
 			
 			int currentScore = ABSearch(child, depth -1, alpha, beta);
 			
-			if(node.player == 1) {
+			if(node.asBlack) {
 			alpha = Math.max(alpha, currentScore);
 			if(alpha >= beta) break;
 			}
@@ -32,12 +34,19 @@ public class ABTree {
 			
 		}
 		
-		if(node.player == 1) {
+		if(node.asBlack) {
 			node.value = alpha;
 		}
 		else {
 			node.value = beta;
 		}
+		
+	}
+	
+	
+	public void createFrontier() {
+		
+		
 		
 	}
 	

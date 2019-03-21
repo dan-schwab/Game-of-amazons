@@ -3,21 +3,21 @@ package cosc322;
 import java.util.ArrayList;
 
 public class AmazonGameState {
-	
-	
+
 	short[][] board = new short[10][10];
 	int turnNumber = 0;
 	ArrayList<short[]> blackQueens;
 	ArrayList<short[]> whiteQueens;
-	
-	
-	//0 = empty, 1 = black queen, 2 = white queen, 3 = arrow;
-	
-	public AmazonGameState(short[][] board, int turnNumber) {
+	public boolean asBlack;
+
+	// 0 = empty, 1 = black queen, 2 = white queen, 3 = arrow;
+
+	public AmazonGameState(short[][] board, int turnNumber, boolean asBlack) {
 		this.board = board;
 		this.turnNumber = turnNumber;
+		this.asBlack = asBlack;
 	}
-	
+
 	public AmazonGameState(int turnNumber) {
 		this.board = new short[][]{{0,0,0,1,0,1,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,1},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{2,0,0,0,0,0,0,0,0,2},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,2,0,2,0,0,0,0}};
 		this.turnNumber = turnNumber;
@@ -30,8 +30,7 @@ public class AmazonGameState {
 		whiteQueens.add({0,6});
 		whiteQueens.add({3,9});
 	}
-	
-	
+
 	public boolean applyMove(ArrayList<Integer> QCurr, ArrayList<Integer> QNew, ArrayList<Integer> ANew) {
 		short queenType = board[QCurr.get(0)][QCurr.get(1)];
 		board[QCurr.get(0)][QCurr.get(1)] = 0;
@@ -49,6 +48,77 @@ public class AmazonGameState {
 		//check if legal move, and return false if not?
 		return true;
 	}
-	
+
+	public ArrayList<short[]> movesFromSpace(short[] startingSpace) {
+
+		ArrayList<short[]> moves = new ArrayList<short[]>();
+		short row = startingSpace[0];
+		short col = startingSpace[1];
+
+		// left moves
+		for (int i = 1; (col - i) >= 0; i++) {
+			if (board[row][col - i] == 0) {
+				moves.add(new short[] { row, (short) (col - i) });
+			}
+
+		}
+
+		// right moves
+		for (int i = 1; (col + i) <= 9; i++) {
+			if (board[row][col + i] == 0) {
+				moves.add(new short[] { row, (short) (col + i) });
+			}
+
+		}
+
+		// up moves
+		for (int i = 1; (row - i) >= 0; i++) {
+			if (board[row - i][col] == 0) {
+				moves.add(new short[] { (short) (row - i), col });
+			}
+
+		}
+
+		// down moves
+		for (int i = 1; (row + i) <= 9; i++) {
+			if (board[row + i][col] == 0) {
+				moves.add(new short[] { (short) (row + i), col });
+			}
+
+		}
+
+		// up/left diag
+		for (int i = 1; (row - i) >= 0 && (col - i) >= 0; i++) {
+			if (board[row - i][col - i] == 0) {
+				moves.add(new short[] { (short) (row - i), (short) (col - i) });
+			}
+
+		}
+		// down/left diag
+		for (int i = 1; (row + i) <= 9 && (col - i) >= 0; i++) {
+			if (board[row + i][col - i] == 0) {
+				moves.add(new short[] { (short) (row + i), (short) (col - i) });
+			}
+
+		}
+		// up/right diag
+		for (int i = 1; (row - i) >= 0 && (col + i) <= 9; i++) {
+			if (board[row - i][col + i] == 0) {
+				moves.add(new short[] { (short) (row - i), (short) (col + i) });
+			}
+
+		}
+		// down/right diag
+		for (int i = 1; (row + i) <= 9 && (col + i) <= 9; i++) {
+			if (board[row + i][col + i] == 0) {
+				moves.add(new short[] { (short) (row + i), (short) (col + i) });
+			}
+
+		}
+		
+		System.out.println("Number of moves for this node is: " + moves.size());
+
+		return moves;
+	}
 
 }
