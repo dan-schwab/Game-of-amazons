@@ -1,5 +1,7 @@
 package cosc322;
 
+import java.util.ArrayList;
+
 public class ABTree {
 	
 	public GameStateNode rootNode;
@@ -41,6 +43,8 @@ public class ABTree {
 			node.value = beta;
 		}
 		
+                
+                return 0;
 	}
 	
 	
@@ -53,6 +57,8 @@ public class ABTree {
 	
 	public int h_value(GameStateNode node) {
 		
+            
+            return 0;
 	}
 	
 }

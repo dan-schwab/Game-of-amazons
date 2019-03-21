@@ -87,7 +87,7 @@ public class Amazons extends GamePlayer{
 		playingAsBlack = true;
 		//turnNumber = 1;
 		currentState = new AmazonGameState(turnNumber, playingAsBlack);
-		GameStateNode currentNode = new GameStateNode(currentState, turnNumber);
+		GameStateNode currentNode = new GameStateNode(currentState, turnNumber, true);
 		gameStateTree = new ABTree(currentNode);
 		
 		gameStateTree.createFrontier();
@@ -104,8 +104,8 @@ public class Amazons extends GamePlayer{
 	    	System.out.println("Game State: " +  msgDetails.get("player-white"));
 	    	playingAsBlack = false;
 			//turnNumber = 1;
-			currentState = new AmazonGameState(turnNumber);
-			GameStateNode currentNode = new GameStateNode(currentState, turnNumber);
+			currentState = new AmazonGameState(turnNumber, playingAsBlack);
+			GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack);
 			gameStateTree = new ABTree(currentNode);
 	    	
 	    }

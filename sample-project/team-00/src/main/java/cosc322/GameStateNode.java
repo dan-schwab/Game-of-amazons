@@ -25,7 +25,7 @@ public class GameStateNode {
 	private void getTerritory() {
 
 	}
-
+/*
 	private void getMinMoves() {
 		for (short i = 0; i < 4; i++) {
 			expandLeft(0, nodeBoard.blackQueens.get(i), true);
@@ -175,10 +175,9 @@ public class GameStateNode {
 			i++;
 		}
 	}
+*/
 
-	public ArrayList(GameStateNode)
-
-	createChildren() {
+	public ArrayList<GameStateNode>	createChildren() {
 		
 		ArrayList<GameStateNode> generated = new ArrayList<GameStateNode>();
 		
@@ -190,9 +189,9 @@ public class GameStateNode {
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
 					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpace(legalQueenMoves.get(j));	
 					
-					AmazonGameState newState = AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
+					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
 					
-					GameStateNode newNode = GameStateNode(newState, turnNumber, asBlack);
+					GameStateNode newNode = new GameStateNode(newState, turnNumber, asBlack);
 					generated.add(newNode);
 					
 					
@@ -212,9 +211,9 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
 					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpace(legalQueenMoves.get(j));	
 					
-					AmazonGameState newState = AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
+					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
 					
-					GameStateNode newNode = GameStateNode(newState, turnNumber, asBlack);
+					GameStateNode newNode = new GameStateNode(newState, turnNumber, asBlack);
 					generated.add(newNode);
 					
 					
@@ -226,9 +225,21 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 			}
 			
 		}
-		
+		System.out.println("Number of moves for this root node is: " + generated.size());
 		return generated;
 		
+	}
+        
+        public static short[][] deepCloneBoard(short[][] oldBoard) {
+		
+		short[][] result = new short[oldBoard.length][];
+		
+		for(int i = 0; i < oldBoard.length; i ++) {
+			result[i] = oldBoard[i].clone();
+		}
+		
+		
+		return result;
 	}
 
 }
