@@ -123,6 +123,12 @@ public class Amazons extends GamePlayer{
     board.markPosition(10-move.QNew[0], 1+move.QNew[1], 10-move.ANew[0], 1+move.ANew[1], 
 			10-move.QOld[0], 1+move.QOld[1], true);
     
+    //for(int i = 0; i < currentState.blackQueens.size();i++) {
+    //    System.out.println("Black queen " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
+    //}for(int i = 0; i < currentState.whiteQueens.size();i++) {
+    //    System.out.println("White queen " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
+   // }
+    
 		playerMove((int) move.QNew[0], (int) move.QNew[1], (int) move.ANew[0], (int) move.ANew[1], (int) move.QOld[0], (int) move.QOld[1]);
 		
 		
@@ -158,11 +164,22 @@ public class Amazons extends GamePlayer{
 
 	board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1), 
 			qcurr.get(0), qcurr.get(1), true);	
+        
+        for(int i = 0; i < currentState.blackQueens.size();i++) {
+        System.out.println("Black queen " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
+    }for(int i = 0; i < currentState.whiteQueens.size();i++) {
+        System.out.println("White queen " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
+    }
     
 	short[] QC = new short[] {(short) (10-qcurr.get(0).intValue()), (short)  (qcurr.get(1).intValue()-1)};
 	short[] QN = new short[] {(short) (10-qnew.get(0).intValue()), (short)  (qnew.get(1).intValue()-1)};
 	short[] AN = new short[] {(short)  (10-arrow.get(0).intValue()), (short) (arrow.get(1).intValue()-1)};
 
+   //     for(int i = 0; i < currentState.blackQueens.size();i++) {
+   //     System.out.println("Black queen post move " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
+   // }for(int i = 0; i < currentState.whiteQueens.size();i++) {
+   //     System.out.println("White queen post move " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
+   // }
 	
 	turnNumber++;
     startTime = System.currentTimeMillis();

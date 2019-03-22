@@ -1,6 +1,7 @@
 package cosc322;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 public class AmazonGameState {
 
@@ -30,7 +31,7 @@ public class AmazonGameState {
 		blackQueens.add(new short[]{0,3});
 		blackQueens.add(new short[]{0,6});
 		blackQueens.add(new short[]{3,9});
-		whiteQueens.add(new short[]{3,0});
+		whiteQueens.add(new short[]{6,0});
 		whiteQueens.add(new short[]{9,3});
 		whiteQueens.add(new short[]{9,6});
 		whiteQueens.add(new short[]{6,9});
@@ -61,6 +62,7 @@ public class AmazonGameState {
 		short queenType = board[QCurr[0]][QCurr[1]]; 
                 if (queenType != 1 && queenType != 2) {
                     System.out.println("WRONG QUEEN INDEX: " + QCurr[0] + ", " + QCurr[1]);
+                    //throw new EmptyStackException();
                 }
 		board[QCurr[0]][QCurr[1]] = 0;
 		board[QNew[0]][QNew[1]] = queenType;
