@@ -16,16 +16,16 @@ public class AmazonGameState {
 		this.board = board;
 		this.turnNumber = turnNumber;
 		this.asBlack = asBlack;
-                this.blackQueens = new ArrayList<short[]>();
-                this.whiteQueens = new ArrayList<short[]>();
+                this.blackQueens = new ArrayList<>();
+                this.whiteQueens = new ArrayList<>();
 	}
 
 	public AmazonGameState(int turnNumber, boolean asBlack) {
 		this.board = new short[][]{{0,0,0,1,0,1,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{1,0,0,0,0,0,0,0,0,1},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{2,0,0,0,0,0,0,0,0,2},{0,0,0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0,0,0},{0,0,0,2,0,2,0,0,0,0}};
 		this.turnNumber = turnNumber;
                 this.asBlack = asBlack;
-                this.blackQueens = new ArrayList<short[]>();
-                this.whiteQueens = new ArrayList<short[]>();
+                this.blackQueens = new ArrayList<>();
+                this.whiteQueens = new ArrayList<>();
 		blackQueens.add(new short[]{6,0});
 		blackQueens.add(new short[]{9,3});
 		blackQueens.add(new short[]{9,6});
