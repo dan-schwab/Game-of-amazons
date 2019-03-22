@@ -70,6 +70,7 @@ public class GameStateNode {
 		short level = 1;
 
 		do{
+                    expand = false;
 		for(short i = 0; i <= 9; i++){
 			for(short j = 0; j <= 9; j++){
 				if(minBlack[i][j]==level){
