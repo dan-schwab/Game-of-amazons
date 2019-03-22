@@ -346,8 +346,8 @@ public class GameStateNode {
 		
 		ArrayList<GameStateNode> generated = new ArrayList<GameStateNode>();
 		
-		if(asBlack) {
-                    System.out.println("Number of queens for this root node is: " + nodeBoard.blackQueens.size());
+		if(this.nodeBoard.asBlack) {
+                    System.out.println("Number of black queens for this root node is: " + nodeBoard.blackQueens.size());
 			for(int i = 0; i < nodeBoard.blackQueens.size(); i ++) {
 				
 				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.blackQueens.get(i));
@@ -370,7 +370,7 @@ public class GameStateNode {
                                         //System.out.println("Queen index: " + queen + " at " + queen[0] + ", " + queen[1]);
                                         
                                         newState.applyMove(nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
-					System.out.println("Node moves queen from" + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1]);
+					//System.out.println("Node moves queen from" + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1]);
 					GameStateNode newNode = new GameStateNode(newState, turnNumber++, asBlack, nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 					generated.add(newNode);
 					
@@ -385,7 +385,8 @@ public class GameStateNode {
 		else {
 			
 for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
-				
+    System.out.println("Number of white queens for this root node is: " + nodeBoard.whiteQueens.size());
+
 				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.whiteQueens.get(i));
 				
 				for(int j = 0; j < legalQueenMoves.size(); j++) {

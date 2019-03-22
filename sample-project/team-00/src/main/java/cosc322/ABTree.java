@@ -8,12 +8,15 @@ public class ABTree {
 	int depth;
     public long startTime;
 	ArrayList<GameStateNode> searchSpace = new ArrayList<GameStateNode>();
+	public GameStateNode currentBest;
+	boolean asBlack;
 	
 	
-	public ABTree(GameStateNode root, long startTime) {
+	public ABTree(GameStateNode root, long startTime, boolean asBlack) {
 		this.rootNode = root;
         this.startTime = startTime;
         this.depth = 0;
+        this.asBlack = asBlack;
 	}
 
 	
@@ -32,7 +35,7 @@ public class ABTree {
 			return node.value;
 			//return h_value(node);
 		}
-		System.out.println("dpeth level > 0, children: " + node.children.size());
+		//System.out.println("dpeth level > 0, children: " + node.children.size());
 		for(GameStateNode child : node.children) {
 			
 			int currentScore = ABSearch(child, depth-1, alpha, beta);
@@ -61,12 +64,52 @@ public class ABTree {
 	}
 	
 	public GameStateNode getOptimalMove() {
+
+            GameStateNode optimal = null;
+		if(asBlack) {
+                    return getOptimalMoveBlack();
+                }
+                else {
+                    return getOptimalMoveWhite();
+                }
+		
+	}
+        
+        public GameStateNode getOptimalMoveBlack() {
 		int max = Integer.MIN_VALUE;
 		GameStateNode optimal = null;
 		ArrayList<GameStateNode> bestList = new ArrayList<>();
 		for(int i = 0; i < rootNode.children.size(); i ++) {
 			if(max < rootNode.children.get(i).value) {
 				max = rootNode.children.get(i).value;
+				bestList.add( rootNode.children.get(i));
+				
+			}
+			
+			
+		}
+		if(bestList.size() > 0) {
+			if(bestList.size() > 1) {
+				optimal = bestList.get(bestList.size() - 1);
+			}
+			else optimal = bestList.get(0);
+		}
+		else {
+			System.out.println("Game Over");
+			return null;
+		}
+		
+		return optimal;
+		
+	}
+	
+	public GameStateNode getOptimalMoveWhite() {
+		int min = Integer.MAX_VALUE;
+		GameStateNode optimal = null;
+		ArrayList<GameStateNode> bestList = new ArrayList<>();
+		for(int i = 0; i < rootNode.children.size(); i ++) {
+			if(min > rootNode.children.get(i).value) {
+				min = rootNode.children.get(i).value;
 				bestList.add( rootNode.children.get(i));
 				
 			}

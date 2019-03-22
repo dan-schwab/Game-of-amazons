@@ -16,8 +16,8 @@ public class AmazonGameState {
 		this.board = board;
 		this.turnNumber = turnNumber;
 		this.asBlack = asBlack;
-                this.blackQueens = black;
-                this.whiteQueens = white;
+        this.blackQueens = black;
+        this.whiteQueens = white;
 	}
 
 	public AmazonGameState(int turnNumber, boolean asBlack) {
