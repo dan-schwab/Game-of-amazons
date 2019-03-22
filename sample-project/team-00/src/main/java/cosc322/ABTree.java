@@ -56,15 +56,15 @@ public class ABTree {
 
     }
     
-    public void trimFrontier() {
-        int avg = 0;
-        for(GameStateNode S: searchSpace) {
+    public void trimFrontier() {                // trim down the search space
+        int avg = 0;                            // average heuristic value
+        for(GameStateNode S: searchSpace) {     // add all heuristic values to average
             avg += h_value(S);
         }
-        if(!searchSpace.isEmpty()) {
+        if(!searchSpace.isEmpty()) {            // if the searchSpace isn't empty get mean
             avg = avg/searchSpace.size();
         }
-        for(GameStateNode S: searchSpace) {
+        for(GameStateNode S: searchSpace) {     // remove all below the average
             if(h_value(S) < avg) {
                 searchSpace.remove(S);
             }
