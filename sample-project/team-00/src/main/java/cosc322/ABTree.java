@@ -58,9 +58,7 @@ public class ABTree {
     
     public void trimFrontier() {                // trim down the search space
         int avg = 0;                            // average heuristic value
-        for(GameStateNode S: searchSpace) {     // add all heuristic values to average
-            avg += h_value(S);
-        }
+        avg = searchSpace.stream().map((S) -> h_value(S)).reduce(avg, Integer::sum); // add all heuristic values to average
         if(!searchSpace.isEmpty()) {            // if the searchSpace isn't empty get mean
             avg = avg/searchSpace.size();
         }
