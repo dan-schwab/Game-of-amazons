@@ -68,9 +68,9 @@ public class GameStateNode {
 				else if(minWhite[i][j]<minBlack[i][j]){
 					whiteTerritory++;
 				}
-                                else {
-                                    neutral++;
-                                }
+                else {
+                    neutral++;
+                }
 			}
 		}
 	}
@@ -161,13 +161,13 @@ public class GameStateNode {
 				if(minWhite[i][j]==level){
 					if(j>0){
 						if(nodeBoard.board[i][j-1]==0){
-							expandLeft(level, new short[]{i,j}, true);
+							expandLeft(level, new short[]{i,j}, false);
 							expand = true;
 						}
 					}
 					if(j<9){
 						if(nodeBoard.board[i][j+1]==0){
-							expandRight(level, new short[]{i,j}, true);
+							expandRight(level, new short[]{i,j}, false);
 							expand = true;
 						}
 					}
