@@ -16,7 +16,7 @@ public class IterativeDeepening {
     GameStateNode target;
     boolean any_remaining;
     boolean remaining;
-    
+
     public GameStateNode iterativeDeepening(GameStateNode root, int goal){
         any_remaining = true;
         for(int depth = 0 ; depth < Integer.MAX_VALUE ; depth++){
@@ -30,7 +30,7 @@ public class IterativeDeepening {
         }
         return null;
     }
-    
+
     public GameStateNode depthLimitedSearch(GameStateNode node, int depth, int goal){
         if(depth == 0){
             remaining = true;
@@ -50,14 +50,14 @@ public class IterativeDeepening {
                     return target;
                 }
                 if(remaining){
-                    any_remaining = true;
+                    any_remaining = true; //At least one node found at depth, let IDS deepen
                 }
             }
-            remaining = any_remaining;
+            remaining = any_remaining;//remaining only becomes false if there are no nodes at current depth
             return null;
         }
     }
-        
+
     }
 
 //    private int numberOfNodes;
