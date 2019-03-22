@@ -66,7 +66,7 @@ public class GameStateNode {
 		//for the current min amount of moves, check if there are any empty spaces adjacent to the current move space
 		//if there are empty spaces, expand again in the direction of the empty space, which represents a new move
 		//go until there are no more expansion (no more reachable spaces)
-		boolean expand = false;
+		boolean expand;
 		short level = 1;
 
 		do{
