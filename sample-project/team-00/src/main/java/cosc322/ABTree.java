@@ -61,7 +61,7 @@ public class ABTree {
         for(GameStateNode S: searchSpace) {
             avg += h_value(S);
         }
-        if(searchSpace.isEmpty()) {
+        if(!searchSpace.isEmpty()) {
             avg = avg/searchSpace.size();
         }
         for(GameStateNode S: searchSpace) {
