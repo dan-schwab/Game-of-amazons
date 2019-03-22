@@ -1,7 +1,4 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
  */
 package cosc322;
 
@@ -16,7 +13,7 @@ public class IterativeDeepening {
     GameStateNode target;
     boolean any_remaining;
     boolean remaining;
-    
+
     public GameStateNode iterativeDeepening(GameStateNode root, int goal){
         any_remaining = true;
         for(int depth = 0 ; depth < Integer.MAX_VALUE ; depth++){
@@ -30,7 +27,7 @@ public class IterativeDeepening {
         }
         return null;
     }
-    
+
     public GameStateNode depthLimitedSearch(GameStateNode node, int depth, int goal){
         if(depth == 0){
             remaining = true;
@@ -57,7 +54,7 @@ public class IterativeDeepening {
             return null;
         }
     }
-        
+
     }
 
 //    private int numberOfNodes;

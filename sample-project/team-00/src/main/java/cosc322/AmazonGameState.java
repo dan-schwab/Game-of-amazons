@@ -16,8 +16,8 @@ public class AmazonGameState {
 		this.board = board;
 		this.turnNumber = turnNumber;
 		this.asBlack = asBlack;
-        this.blackQueens = black;
-        this.whiteQueens = white;
+        this.blackQueens = deepCloneBlack(black);
+        this.whiteQueens = deepCloneWhite(white);
 	}
 
 	public AmazonGameState(int turnNumber, boolean asBlack) {
@@ -58,7 +58,10 @@ public class AmazonGameState {
 	
 	public boolean applyMove(short[] QCurr, short[]QNew, short[] ANew) {
             
-		short queenType = board[QCurr[0]][QCurr[1]];               
+		short queenType = board[QCurr[0]][QCurr[1]]; 
+                if (queenType != 1 && queenType != 2) {
+                    System.out.println("WRONG QUEEN INDEX: " + QCurr[0] + ", " + QCurr[1]);
+                }
 		board[QCurr[0]][QCurr[1]] = 0;
 		board[QNew[0]][QNew[1]] = queenType;
 		board[ANew[0]][ANew[1]] = 3;
