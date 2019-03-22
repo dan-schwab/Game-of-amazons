@@ -709,7 +709,7 @@ public class Amazons extends GamePlayer{
      */
     public static void main(String[] args) { 
 	Amazons game01 = new Amazons("Hippolyta", "01");
-	Amazons game02 = new Amazons("player-02", "02");
+	//Amazons game02 = new Amazons("player-02", "02");
 	//Amazons game = new Amazons(args[0], args[1]);		
     }
 }//end of Amazon
