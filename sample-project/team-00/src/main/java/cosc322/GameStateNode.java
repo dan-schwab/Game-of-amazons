@@ -9,7 +9,8 @@ public class GameStateNode {
 	public int turnNumber;
 	public boolean asBlack;
 	public ArrayList<GameStateNode> children;
-	public short[][] territory;
+	public short blackTerritory;
+	public short whiteTerritory;
 	public short[][] minBlack;
 	public short[][] minWhite;
 
@@ -17,13 +18,31 @@ public class GameStateNode {
 		this.nodeBoard = board;
 		this.turnNumber = turnNumber;
 		this.asBlack = asBlack;
-		this.territory = new short[10][10];
 		this.minBlack = new short[10][10];
 		this.minWhite = new short[10][10];
+		getMinMoves();
+		getTerritory();
 	}
 
 	private void getTerritory() {
-
+		for(short i = 0; i <= 9; i++){
+			for(short j = 0; j <= 9; j++){
+				if(minBlack[i][j]==0){
+					if(minWhite[i][j]!=0){
+						whiteTerritory++;
+					}
+				}
+				else if(minWhite[i][j]==0){
+					blackTerritory++;	
+				}
+				else if(minBlack[i][j]<minWhite[i][j]){
+					blackTerritory++;
+				}
+				else if(minWhite[i][j]<minBlack[i][j]){
+					whiteTerritory++;
+				}
+			}
+		}
 	}
         
     private void getMinMoves(){
