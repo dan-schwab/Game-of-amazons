@@ -6,7 +6,7 @@ public class ABTree {
 
     public GameStateNode rootNode;
     int depth = 0;
-    ArrayList<GameStateNode> searchSpace = new ArrayList<GameStateNode>();
+    ArrayList<GameStateNode> searchSpace = new ArrayList<>();
 
     public ABTree(GameStateNode root) {
         this.rootNode = root;
