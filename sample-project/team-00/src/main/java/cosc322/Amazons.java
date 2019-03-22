@@ -35,7 +35,7 @@ public class Amazons extends GamePlayer{
     private ABTree gameStateTree = null;
     int turnNumber = 1;
     private AmazonGameState currentState = null;
-    int ourColour;
+    boolean playingAsBlack;
             
     
     /**
@@ -84,13 +84,13 @@ public class Amazons extends GamePlayer{
 	if(messageType.equals(GameMessage.GAME_ACTION_START)){	 
 	    if(((String) msgDetails.get("player-black")).equals(this.userName())){
 		System.out.println("Game State: " +  msgDetails.get("player-black"));
-		ourColour = 1;
+		playingAsBlack = true;
 		//turnNumber = 1;
-		currentState = new AmazonGameState(turnNumber);
-		GameStateNode currentNode = new GameStateNode(currentState, turnNumber);
+		currentState = new AmazonGameState(turnNumber, playingAsBlack);
+		GameStateNode currentNode = new GameStateNode(currentState, turnNumber, true);
 		gameStateTree = new ABTree(currentNode);
 		
-		//gameStateTree.createFrontier();
+		gameStateTree.createFrontier();
 		//gameStateTree.prune();
 		//gameStateTree.ABSearch();
 		
@@ -102,10 +102,10 @@ public class Amazons extends GamePlayer{
 	    }
 	    else if(((String) msgDetails.get("player-white")).equals(this.userName())) {
 	    	System.out.println("Game State: " +  msgDetails.get("player-white"));
-			ourColour = -1;
+	    	playingAsBlack = false;
 			//turnNumber = 1;
-			currentState = new AmazonGameState(turnNumber);
-			GameStateNode currentNode = new GameStateNode(currentState, turnNumber);
+			currentState = new AmazonGameState(turnNumber, playingAsBlack);
+			GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack);
 			gameStateTree = new ABTree(currentNode);
 	    	
 	    }
