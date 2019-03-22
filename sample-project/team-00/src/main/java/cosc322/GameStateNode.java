@@ -347,12 +347,12 @@ public class GameStateNode {
 		ArrayList<GameStateNode> generated = new ArrayList<GameStateNode>();
 
 		if(this.nodeBoard.asBlack) {
-                    System.out.println("Number of black queens for this root node is: " + nodeBoard.blackQueens.size());
+                    //System.out.println("Number of black queens for this root node is: " + nodeBoard.blackQueens.size());
 			for(int i = 0; i < nodeBoard.blackQueens.size(); i ++) {
 
 				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.blackQueens.get(i));
 
-                                System.out.println("Number of space moves for queen " + i + " at " + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1] + " is: " + legalQueenMoves.size());
+                                //System.out.println("Number of space moves for queen " + i + " at " + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1] + " is: " + legalQueenMoves.size());
 
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
 					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpaceArrow(legalQueenMoves.get(j), nodeBoard.blackQueens.get(i));
@@ -360,7 +360,7 @@ public class GameStateNode {
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
 
 
-					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack,  deepCloneBlack(nodeBoard.blackQueens), deepCloneWhite(nodeBoard.whiteQueens));
+					AmazonGameState newState = new AmazonGameState(cloneBoard(nodeBoard.board), turnNumber, asBlack,  cloneBlack(nodeBoard.blackQueens), cloneWhite(nodeBoard.whiteQueens));
 
                                         for(short[] queen : nodeBoard.blackQueens) {
                                         //System.out.println("Queen index: " + queen + " at " + queen[0] + ", " + queen[1]);
@@ -395,7 +395,7 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
 
 
-					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack, deepCloneBlack(nodeBoard.blackQueens), deepCloneWhite(nodeBoard.whiteQueens));
+					AmazonGameState newState = new AmazonGameState(cloneBoard(nodeBoard.board), turnNumber, asBlack, cloneBlack(nodeBoard.blackQueens), cloneWhite(nodeBoard.whiteQueens));
                                         //System.out.println("Queen is at: " + nodeBoard.whiteQueens.get(i));
                                         newState.applyMove(nodeBoard.whiteQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 
@@ -414,8 +414,8 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 		return generated;
 
 	}
-        
-        public static short[][] deepCloneBoard(short[][] oldBoard) {
+
+        public static short[][] cloneBoard(short[][] oldBoard) {
 
 		short[][] result = new short[oldBoard.length][];
 
@@ -427,7 +427,7 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 		return result;
 	}
 
-        public static ArrayList<short[]> deepCloneWhite(ArrayList<short[]> white) {
+        public static ArrayList<short[]> cloneWhite(ArrayList<short[]> white) {
 
 		ArrayList<short[]> result = new ArrayList<short[]>();
 
@@ -439,7 +439,7 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 		return result;
 	}
 
-        public static ArrayList<short[]> deepCloneBlack(ArrayList<short[]> black) {
+        public static ArrayList<short[]> cloneBlack(ArrayList<short[]> black) {
 
 		ArrayList<short[]> result = new ArrayList<short[]>();
 
@@ -451,17 +451,20 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 		return result;
 	}
 
-    public GameStateNode deepClone() {
-        GameStateNode node = new GameStateNode(this.nodeBoard, this.turnNumber, this.asBlack);
-        node.value = this.value;
-        node.turnNumber = this.turnNumber;
-        node.blackTerritory = this.blackTerritory;
-        node.whiteTerritory = this.whiteTerritory;
+    public GameStateNode cloneGameStateNode(GameStateNode input) {
+        GameStateNode node = new GameStateNode(input.nodeBoard, input.turnNumber, input.asBlack, input.QOld, input.QNew, input.ANew);
+        node.value = input.value;
+        node.turnNumber = input.turnNumber;
+        node.blackTerritory = input.blackTerritory;
+        node.whiteTerritory = input.whiteTerritory;
         for (int i = 0; i < minBlack.length; i++) {
-            node.minBlack[i] = this.minBlack[i].clone();
-            node.minWhite[i] = this.minWhite[i].clone();
+            node.minBlack[i] = input.minBlack[i].clone();
+        }
+        for (int i = 0; i < minWhite.length; i++) {
+            node.minWhite[i] = input.minWhite[i].clone();
         }
         return node;
     }
+
 
 }

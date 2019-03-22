@@ -95,7 +95,7 @@ public class Amazons extends GamePlayer{
 		GameStateNode currentNode = new GameStateNode(currentState, turnNumber, true, null, null, null);
 		gameStateTree = new ABTree(currentNode, startTime, currentState.asBlack);
 		
-		gameStateTree.createFrontier();
+		gameStateTree.createFrontier();                
 		gameStateTree.AlphaBetaHelper();
 		GameStateNode move = gameStateTree.getOptimalMove();
 		
@@ -116,6 +116,19 @@ public class Amazons extends GamePlayer{
        }
 		
 		currentState = move.nodeBoard;
+               // try {
+    //if(System.currentTimeMillis() - startTime < 20000)
+    //    Thread.sleep(2000);
+    //} catch(Exception e){};
+    board.markPosition(10-move.QNew[0], 1+move.QNew[1], 10-move.ANew[0], 1+move.ANew[1], 
+			10-move.QOld[0], 1+move.QOld[1], true);
+    
+    //for(int i = 0; i < currentState.blackQueens.size();i++) {
+    //    System.out.println("Black queen " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
+    //}for(int i = 0; i < currentState.whiteQueens.size();i++) {
+    //    System.out.println("White queen " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
+   // }
+    
 		playerMove((int) move.QNew[0], (int) move.QNew[1], (int) move.ANew[0], (int) move.ANew[1], (int) move.QOld[0], (int) move.QOld[1]);
 		
 		
@@ -140,7 +153,7 @@ public class Amazons extends GamePlayer{
     
     //handle the event that the opponent makes a move. 
     private void handleOpponentMove(Map<String, Object> msgDetails){
-    System.out.println(this.userName() + " recieving a move, playing as " + currentState.asBlack);
+    System.out.println(this.userName() + " recieving a move, playing as " + currentState.asBlack + " on turn: " + turnNumber);
 	System.out.println("OpponentMove(): " + msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR));
 	ArrayList<Integer> qcurr = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);
 	ArrayList<Integer> qnew = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.Queen_POS_NEXT);
@@ -151,11 +164,22 @@ public class Amazons extends GamePlayer{
 
 	board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1), 
 			qcurr.get(0), qcurr.get(1), true);	
+        
+        for(int i = 0; i < currentState.blackQueens.size();i++) {
+        System.out.println("Black queen " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
+    }for(int i = 0; i < currentState.whiteQueens.size();i++) {
+        System.out.println("White queen " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
+    }
     
 	short[] QC = new short[] {(short) (10-qcurr.get(0).intValue()), (short)  (qcurr.get(1).intValue()-1)};
 	short[] QN = new short[] {(short) (10-qnew.get(0).intValue()), (short)  (qnew.get(1).intValue()-1)};
 	short[] AN = new short[] {(short)  (10-arrow.get(0).intValue()), (short) (arrow.get(1).intValue()-1)};
 
+   //     for(int i = 0; i < currentState.blackQueens.size();i++) {
+   //     System.out.println("Black queen post move " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
+   // }for(int i = 0; i < currentState.whiteQueens.size();i++) {
+   //     System.out.println("White queen post move " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
+   // }
 	
 	turnNumber++;
     startTime = System.currentTimeMillis();
@@ -168,8 +192,18 @@ public class Amazons extends GamePlayer{
 	turnNumber++;
     
     gameStateTree.createFrontier();
+    if(turnNumber > 40) {
+        System.out.println("Expanding before: " + gameStateTree.searchSpace.size());
+                gameStateTree.expandDeeper();
+                System.out.println("Expanding afer: " + gameStateTree.searchSpace.size());
+                }
+    if(turnNumber > 60) {
+        System.out.println("Expanding before: " + gameStateTree.searchSpace.size());
+                gameStateTree.expandDeeper();
+                System.out.println("Expanding afer: " + gameStateTree.searchSpace.size());
+                }
 	gameStateTree.AlphaBetaHelper();
-		GameStateNode move = gameStateTree.getOptimalMove();
+        GameStateNode move = gameStateTree.getOptimalMove();
 
 	
 	if(move == null) {
@@ -192,6 +226,10 @@ public class Amazons extends GamePlayer{
    }
 	
     currentState = move.nodeBoard;
+    //try {
+    //if(System.currentTimeMillis() - startTime < 20000)
+    //    Thread.sleep(2000);
+    //} catch(Exception e){};
 	playerMove((int) move.QNew[0], (int) move.QNew[1], (int) move.ANew[0], (int) move.ANew[1], (int) move.QOld[0], (int) move.QOld[1]);
 	
 		//gameStateTree.ABSearch();
