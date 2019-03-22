@@ -20,8 +20,8 @@ public class GameStateNode {
 		this.asBlack = asBlack;
 		this.minBlack = new short[10][10];
 		this.minWhite = new short[10][10];
-		getMinMoves();
-		getTerritory();
+		//getMinMoves();
+		//getTerritory();
 	}
 
 	private void getTerritory() {
@@ -287,20 +287,28 @@ public class GameStateNode {
                     System.out.println("Number of queens for this root node is: " + nodeBoard.blackQueens.size());
 			for(int i = 0; i < nodeBoard.blackQueens.size(); i ++) {
 				
-				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpace(nodeBoard.blackQueens.get(i));
+				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.blackQueens.get(i));
                                 
                                 System.out.println("Number of space moves for queen " + i + " at " + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1] + " is: " + legalQueenMoves.size());
 				
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
-					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpace(legalQueenMoves.get(j));	
+					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpaceArrow(legalQueenMoves.get(j), nodeBoard.blackQueens.get(i));	
 					
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
                                             
                                         
-					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
+					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack,  deepCloneBlack(nodeBoard.blackQueens), deepCloneWhite(nodeBoard.whiteQueens));
+                                        
+                                        for(short[] queen : nodeBoard.blackQueens) {
+                                        //System.out.println("Queen index: " + queen + " at " + queen[0] + ", " + queen[1]);
+
+                                        }
+                                        
+                                        //System.out.println("Queen index: " + queen + " at " + queen[0] + ", " + queen[1]);
+                                        
                                         newState.applyMove(nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 					
-					GameStateNode newNode = new GameStateNode(newState, turnNumber, asBlack);
+					GameStateNode newNode = new GameStateNode(newState, turnNumber++, !asBlack);
 					generated.add(newNode);
 					
                                 }
@@ -315,16 +323,17 @@ public class GameStateNode {
 			
 for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 				
-				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpace(nodeBoard.blackQueens.get(i));
+				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.whiteQueens.get(i));
 				
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
-					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpace(legalQueenMoves.get(j));	
+					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpaceArrow(legalQueenMoves.get(j), nodeBoard.whiteQueens.get(i));	
 					
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
                                             
                                         
-					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack);
-                                        newState.applyMove(nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
+					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack, deepCloneBlack(nodeBoard.blackQueens), deepCloneWhite(nodeBoard.whiteQueens));
+                                        //System.out.println("Queen is at: " + nodeBoard.whiteQueens.get(i));
+                                        newState.applyMove(nodeBoard.whiteQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 					
 					GameStateNode newNode = new GameStateNode(newState, turnNumber, asBlack);
 					generated.add(newNode);
@@ -350,6 +359,30 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 		}
 		
 		
+		return result;
+	}
+        
+        public static ArrayList<short[]> deepCloneWhite(ArrayList<short[]> white) {
+		
+		ArrayList<short[]> result = new ArrayList<short[]>();
+		
+		for(int i = 0; i < white.size(); i ++) {
+			result.add(white.get(i));
+		}
+               
+			
+		return result;
+	}
+        
+        public static ArrayList<short[]> deepCloneBlack(ArrayList<short[]> black) {
+		
+		ArrayList<short[]> result = new ArrayList<short[]>();
+		
+		for(int i = 0; i < black.size(); i ++) {
+			result.add(black.get(i));
+		}
+               
+			
 		return result;
 	}
 
