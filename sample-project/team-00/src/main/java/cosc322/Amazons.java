@@ -68,7 +68,7 @@ public class Amazons extends GamePlayer{
 
 	//once logged in, the gameClient will have  the names of available game rooms  
 	ArrayList<String> rooms = gameClient.getRoomList();
-	this.gameClient.joinRoom(rooms.get(8));	 		
+	this.gameClient.joinRoom(rooms.get(0));	 		
     }
     
     
@@ -100,9 +100,9 @@ public class Amazons extends GamePlayer{
 		GameStateNode move = gameStateTree.getOptimalMove();
 		
 		System.out.println("Found optimal move");
-		System.out.println("Move queen at " +  + (int) move.QOld[0] + ", "   + (int) move.QOld[1]);
-		System.out.println("To "  + (int)move.QNew[0] + ", "   + (int) move.QNew[1]);
-		System.out.println("Then shoot arrow to " + (int) move.ANew[0] + ", "   + (int) move.ANew[1]);
+		System.out.println("Move queen at " +  + (int) (10-move.QOld[0]) + ", "   + (int) (1+move.QOld[1]));
+		System.out.println("To "  + (int)(10-move.QNew[0]) + ", "   + (int) (1+move.QNew[1]));
+		System.out.println("Then shoot arrow to " + (int) (10-move.ANew[0]) + ", "   + (int) (1+move.ANew[1]));
 		System.out.println("White territory is: " + move.whiteTerritory);
         System.out.println("Black territory is: " + move.blackTerritory);
         System.out.println("neutral territory is: " + move.neutral);
