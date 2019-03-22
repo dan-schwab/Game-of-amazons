@@ -55,6 +55,21 @@ public class ABTree {
         rootNode.createChildren();
 
     }
+    
+    public void trimFrontier() {
+        int avg = 0;
+        for(GameStateNode S: searchSpace) {
+            avg += h_value(S);
+        }
+        if(searchSpace.size() != 0) {
+            avg = avg/searchSpace.size();
+        }
+        for(GameStateNode S: searchSpace) {
+            if(h_value(S) < avg) {
+                searchSpace.remove(S);
+            }
+        }
+    }
 
     public int miniMax(GameStateNode node, boolean isMaxPlayer, int alpha, int beta) {
         //if node is leaf: return value of the node
