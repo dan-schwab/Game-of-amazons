@@ -54,6 +54,7 @@ public class COSC322Test extends GamePlayer{
 	    + "I am called because the server indicated that the login is successfully");
 	System.out.println("The next step is to find a room and join it: "
 	    + "the gameClient instance created in my constructor knows how!");
+
 	this.gameClient.logout();
     }
     

@@ -33,7 +33,7 @@ public class GameStateNode {
 					}
 				}
 				else if(minWhite[i][j]==0){
-					blackTerritory++;	
+					blackTerritory++;
 				}
 				else if(minBlack[i][j]<minWhite[i][j]){
 					blackTerritory++;
@@ -44,7 +44,7 @@ public class GameStateNode {
 			}
 		}
 	}
-        
+
     private void getMinMoves(){
 		for(short i=0; i<4; i++){
 			expandLeft((short) 0, nodeBoard.blackQueens.get(i), true);
@@ -55,7 +55,7 @@ public class GameStateNode {
 			expandDiagRightDown((short) 0, nodeBoard.blackQueens.get(i), true);
 			expandDiagLeftUp((short) 0, nodeBoard.blackQueens.get(i), true);
 			expandDiagLeftDown((short) 0, nodeBoard.blackQueens.get(i), true);
-			
+
 			expandLeft((short) 0, nodeBoard.whiteQueens.get(i), false);
 			expandRight((short) 0, nodeBoard.whiteQueens.get(i), false);
 			expandUp((short) 0, nodeBoard.whiteQueens.get(i), false);
@@ -65,14 +65,14 @@ public class GameStateNode {
 			expandDiagLeftUp((short) 0, nodeBoard.whiteQueens.get(i), false);
 			expandDiagLeftDown((short) 0, nodeBoard.whiteQueens.get(i), false);
 		}
-		
-		
+
+
 		//for the current min amount of moves, check if there are any empty spaces adjacent to the current move space
 		//if there are empty spaces, expand again in the direction of the empty space, which represents a new move
 		//go until there are no more expansion (no more reachable spaces)
 		boolean expand = false;
 		short level = 1;
-		
+
 		do{
 		expand = false;
 		for(short i = 0; i <= 9; i++){
@@ -127,7 +127,7 @@ public class GameStateNode {
 						}
 					}
 				}
-				
+
 				if(minWhite[i][j]==level){
 					if(j>0){
 						if(nodeBoard.board[i][j-1]==0){
@@ -183,7 +183,7 @@ public class GameStateNode {
 		level++;
 		}while(expand);
 	}
-	
+
 	private void expandLeft(short value, short[] position, boolean black){
 		for(int i=position[1]-1; i>=0; i--){
 			if(black){
@@ -198,7 +198,7 @@ public class GameStateNode {
 			}
 		}
 	}
-	
+
 	private void expandRight(short value, short[] position, boolean black){
 		for(int i=position[1]+1; i<=9; i++){
 			if(black){
@@ -213,7 +213,7 @@ public class GameStateNode {
 			}
 		}
 	}
-	
+
 	private void expandUp(short value, short[] position, boolean black){
 		for(int i=position[0]+1; i<=9; i++){
 			if(black){
@@ -228,7 +228,7 @@ public class GameStateNode {
 			}
 		}
 	}
-	
+
 	private void expandDown(short value, short[] position, boolean black){
 		for(int i=position[0]-1; i>=0; i--){
 			if(black){
@@ -243,7 +243,7 @@ public class GameStateNode {
 			}
 		}
 	}
-	
+
 	private void expandDiagRightUp(short value, short[] position, boolean black){
 		short i=1;
 		while(position[0]+i<=9 && position[1]+i<=9){
@@ -260,7 +260,7 @@ public class GameStateNode {
 			i++;
 		}
 	}
-	
+
 	private void expandDiagRightDown(short value, short[] position, boolean black){
 		short i=1;
 		while(position[0]-i>=0 && position[1]+i<=9){
@@ -277,7 +277,7 @@ public class GameStateNode {
 			i++;
 		}
 	}
-	
+
 	private void expandDiagLeftUp(short value, short[] position, boolean black){
 		short i=1;
 		while(position[0]+i<=9 && position[1]-i>=0){
@@ -294,7 +294,7 @@ public class GameStateNode {
 			i++;
 		}
 	}
-	
+
 	private void expandDiagLeftDown(short value, short[] position, boolean black){
 		short i=1;
 		while(position[0]-i>=0 && position[1]-i>=0){
@@ -313,109 +313,109 @@ public class GameStateNode {
 	}
 
 	public ArrayList<GameStateNode>	createChildren() {
-		
+
 		ArrayList<GameStateNode> generated = new ArrayList<GameStateNode>();
-		
+
 		if(asBlack) {
                     System.out.println("Number of queens for this root node is: " + nodeBoard.blackQueens.size());
 			for(int i = 0; i < nodeBoard.blackQueens.size(); i ++) {
-				
+
 				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.blackQueens.get(i));
-                                
+
                                 System.out.println("Number of space moves for queen " + i + " at " + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1] + " is: " + legalQueenMoves.size());
-				
+
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
-					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpaceArrow(legalQueenMoves.get(j), nodeBoard.blackQueens.get(i));	
-					
+					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpaceArrow(legalQueenMoves.get(j), nodeBoard.blackQueens.get(i));
+
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
-                                            
-                                        
+
+
 					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack,  deepCloneBlack(nodeBoard.blackQueens), deepCloneWhite(nodeBoard.whiteQueens));
-                                        
+
                                         for(short[] queen : nodeBoard.blackQueens) {
                                         //System.out.println("Queen index: " + queen + " at " + queen[0] + ", " + queen[1]);
 
                                         }
-                                        
+
                                         //System.out.println("Queen index: " + queen + " at " + queen[0] + ", " + queen[1]);
-                                        
+
                                         newState.applyMove(nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
-					
+
 					GameStateNode newNode = new GameStateNode(newState, turnNumber++, !asBlack);
 					generated.add(newNode);
-					
+
                                 }
 				}
-				
-				
-				
-				
+
+
+
+
 			}
 		}
 		else {
-			
+
 for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
-				
+
 				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.whiteQueens.get(i));
-				
+
 				for(int j = 0; j < legalQueenMoves.size(); j++) {
-					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpaceArrow(legalQueenMoves.get(j), nodeBoard.whiteQueens.get(i));	
-					
+					ArrayList<short[]> legalArrowShots = nodeBoard.movesFromSpaceArrow(legalQueenMoves.get(j), nodeBoard.whiteQueens.get(i));
+
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
-                                            
-                                        
+
+
 					AmazonGameState newState = new AmazonGameState(deepCloneBoard(nodeBoard.board), turnNumber, asBlack, deepCloneBlack(nodeBoard.blackQueens), deepCloneWhite(nodeBoard.whiteQueens));
                                         //System.out.println("Queen is at: " + nodeBoard.whiteQueens.get(i));
                                         newState.applyMove(nodeBoard.whiteQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
-					
+
 					GameStateNode newNode = new GameStateNode(newState, turnNumber, asBlack);
 					generated.add(newNode);
-					
+
                                 }
 				}
-				
+
 			}
-			
+
 		}
-                
+
 		System.out.println("Number of moves for this root node is: " + generated.size());
 		return generated;
-		
+
 	}
-        
+
         public static short[][] deepCloneBoard(short[][] oldBoard) {
-		
+
 		short[][] result = new short[oldBoard.length][];
-		
+
 		for(int i = 0; i < oldBoard.length; i ++) {
 			result[i] = oldBoard[i].clone();
 		}
-		
-		
+
+
 		return result;
 	}
-        
+
         public static ArrayList<short[]> deepCloneWhite(ArrayList<short[]> white) {
-		
+
 		ArrayList<short[]> result = new ArrayList<short[]>();
-		
+
 		for(int i = 0; i < white.size(); i ++) {
 			result.add(white.get(i));
 		}
-               
-			
+
+
 		return result;
 	}
-        
+
         public static ArrayList<short[]> deepCloneBlack(ArrayList<short[]> black) {
-		
+
 		ArrayList<short[]> result = new ArrayList<short[]>();
-		
+
 		for(int i = 0; i < black.size(); i ++) {
 			result.add(black.get(i));
 		}
-               
-			
+
+
 		return result;
 	}
 
