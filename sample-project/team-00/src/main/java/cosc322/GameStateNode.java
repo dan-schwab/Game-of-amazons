@@ -399,5 +399,17 @@ public class GameStateNode {
 
         return result;
     }
+    public GameStateNode deepClone() {
+        GameStateNode node = new GameStateNode(this.nodeBoard, this.turnNumber, this.asBlack);
+        node.value = this.value;
+        node.turnNumber = this.turnNumber;
+        node.blackTerritory = this.blackTerritory;
+        node.whiteTerritory = this.whiteTerritory;
+        for (int i = 0; i < minBlack.length; i++) {
+            node.minBlack[i] = this.minBlack[i].clone();
+            node.minWhite[i] = this.minWhite[i].clone();
+        }
+        return node;
+    }
 
 }
