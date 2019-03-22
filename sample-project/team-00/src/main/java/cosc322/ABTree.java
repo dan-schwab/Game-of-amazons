@@ -146,11 +146,11 @@ public class ABTree {
 
 	public void removeLowValue() {                // remove low heuristic value nodes
         int avg = 0;
-        //avg = searchSpace.stream().map((S) -> h_value(S)).reduce(avg, Integer::sum); // add all heuristic values to average
-        for(int i = 0; i < searchSpace.size(); i++) {
-            avg+= searchSpace.get(i).value;
-
-        }
+        avg = searchSpace.stream().map((S) -> S.value).reduce(avg, Integer::sum); // add all heuristic values to average
+//        for(int i = 0; i < searchSpace.size(); i++) {
+//            avg+= searchSpace.get(i).value;
+//
+//        }
         if (!searchSpace.isEmpty()) {
             avg = avg / searchSpace.size();
         }
