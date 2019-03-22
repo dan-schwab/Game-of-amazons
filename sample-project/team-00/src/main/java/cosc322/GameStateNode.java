@@ -70,108 +70,75 @@ public class GameStateNode {
 		short level = 1;
 
 		do{
-		expand = false;
 		for(short i = 0; i <= 9; i++){
 			for(short j = 0; j <= 9; j++){
 				if(minBlack[i][j]==level){
-					if(j>0){
-						if(nodeBoard.board[i][j-1]==0){
-							expandLeft(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i][j-1]==0){
+						expandLeft(level, new short[]{i,j}, true);
+						expand = true;
 					}
-					if(j<9){
-						if(nodeBoard.board[i][j+1]==0){
-							expandRight(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i][j+1]==0){
+						expandRight(level, new short[]{i,j}, true);
+						expand = true;
 					}
-					if(i>0){
-						if(nodeBoard.board[i-1][j]==0){
-							expandDown(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i-1][j]==0){
+						expandDown(level, new short[]{i,j}, true);
+						expand = true;
 					}
-					if(i<9){
-						if(nodeBoard.board[i+1][j]==0){
-							expandUp(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i+1][j]==0){
+						expandUp(level, new short[]{i,j}, true);
+						expand = true;
 					}
-					if(i<9&&j<9){
-						if(nodeBoard.board[i+1][j+1]==0){
-							expandDiagRightUp(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i+1][j+1]==0){
+						expandDiagRightUp(level, new short[]{i,j}, true);
+						expand = true;
 					}
-					if(i>0&&j<9){
-						if(nodeBoard.board[i-1][j+1]==0){
-							expandDiagRightDown(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i-1][j+1]==0){
+						expandDiagRightDown(level, new short[]{i,j}, true);
+						expand = true;
 					}
-					if(i<9&&j>0){
-						if(nodeBoard.board[i+1][j-1]==0){
-							expandDiagLeftUp(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i+1][j-1]==0){
+						expandDiagLeftUp(level, new short[]{i,j}, true);
+						expand = true;
 					}
-					if(i>0&&j>0){
-						if(nodeBoard.board[i-1][j-1]==0){
-							expandDiagLeftDown(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i-1][j-1]==0){
+						expandDiagLeftDown(level, new short[]{i,j}, true);
+						expand = true;
 					}
 				}
 
 				if(minWhite[i][j]==level){
-					if(j>0){
-						if(nodeBoard.board[i][j-1]==0){
-							expandLeft(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i][j-1]==0){
+						expandLeft(level, new short[]{i,j}, false);
+						expand = true;
 					}
-					if(j<9){
-						if(nodeBoard.board[i][j+1]==0){
-							expandRight(level, new short[]{i,j}, true);
-							expand = true;
-						}
+					if(nodeBoard.board[i][j+1]==0){
+						expandRight(level, new short[]{i,j}, false);
+						expand = true;
 					}
-					if(i>0){
-						if(nodeBoard.board[i-1][j]==0){
-							expandDown(level, new short[]{i,j}, false);
-							expand = true;
-						}
+					if(nodeBoard.board[i-1][j]==0){
+						expandDown(level, new short[]{i,j}, false);
+						expand = true;
 					}
-					if(i<9){
-						if(nodeBoard.board[i+1][j]==0){
-							expandUp(level, new short[]{i,j}, false);
-							expand = true;
-						}
+					if(nodeBoard.board[i+1][j]==0){
+						expandUp(level, new short[]{i,j}, false);
+						expand = true;
 					}
-					if(i<9&&j<9){
-						if(nodeBoard.board[i+1][j+1]==0){
-							expandDiagRightUp(level, new short[]{i,j}, false);
-							expand = true;
-						}
+					if(nodeBoard.board[i+1][j+1]==0){
+						expandDiagRightUp(level, new short[]{i,j}, false);
+						expand = true;
 					}
-					if(i>0&&j<9){
-						if(nodeBoard.board[i-1][j+1]==0){
-							expandDiagRightDown(level, new short[]{i,j}, false);
-							expand = true;
-						}
+					if(nodeBoard.board[i-1][j+1]==0){
+						expandDiagRightDown(level, new short[]{i,j}, false);
+						expand = true;
 					}
-					if(i<9&&j>0){
-						if(nodeBoard.board[i+1][j-1]==0){
-							expandDiagLeftUp(level, new short[]{i,j}, false);
-							expand = true;
-						}
+					if(nodeBoard.board[i+1][j-1]==0){
+						expandDiagLeftUp(level, new short[]{i,j}, false);
+						expand = true;
 					}
-					if(i>0&&j>0){
-						if(nodeBoard.board[i-1][j-1]==0){
-							expandDiagLeftDown(level, new short[]{i,j}, false);
-							expand = true;
-						}
+					if(nodeBoard.board[i-1][j-1]==0){
+						expandDiagLeftDown(level, new short[]{i,j}, false);
+						expand = true;
 					}
 				}
 			}

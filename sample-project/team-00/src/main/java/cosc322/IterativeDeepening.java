@@ -13,14 +13,16 @@ import java.util.ArrayList;
  * @author mattd
  */
 public class IterativeDeepening {
-    GameStateNode found;
+    GameStateNode target;
     boolean any_remaining;
+    boolean remaining;
     
     public GameStateNode iterativeDeepening(GameStateNode root, int goal){
+        any_remaining = true;
         for(int depth = 0 ; depth < Integer.MAX_VALUE ; depth++){
-            found = depthLimitedSearch(root, depth, goal);
-            if(found != null){
-                return found;
+            target = depthLimitedSearch(root, depth, goal);
+            if(target != null){
+                return target;
             }
             if(!any_remaining){
                 return null;
@@ -31,7 +33,7 @@ public class IterativeDeepening {
     
     public GameStateNode depthLimitedSearch(GameStateNode node, int depth, int goal){
         if(depth == 0){
-            any_remaining = true;
+            remaining = true;
             if(node.value == goal){
                 return node;
             }
@@ -42,16 +44,16 @@ public class IterativeDeepening {
         else{
             any_remaining = false;
             for(GameStateNode child : node.children){
-                found = depthLimitedSearch(child, depth - 1, goal);
-                if(found != null){
-                    any_remaining = true;
-                    return found;
+                target = depthLimitedSearch(child, depth - 1, goal);
+                if(target != null){
+                    remaining = true;
+                    return target;
                 }
-                if(any_remaining){
+                if(remaining){
                     any_remaining = true;
-                    return null;
                 }
             }
+            remaining = any_remaining;
             return null;
         }
     }
