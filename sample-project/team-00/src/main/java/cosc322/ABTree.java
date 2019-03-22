@@ -55,24 +55,18 @@ public class ABTree {
         rootNode.createChildren();
 
     }
-    
+
     public void trimFrontier() {                // trim down the search space
         int avg = 0;                            // average heuristic value
         avg = searchSpace.stream().map((S) -> h_value(S)).reduce(avg, Integer::sum); // add all heuristic values to average
-        if(!searchSpace.isEmpty()) {            // if the searchSpace isn't empty get mean
-            avg = avg/searchSpace.size();
+        if (!searchSpace.isEmpty()) {            // if the searchSpace isn't empty get mean
+            avg = avg / searchSpace.size();
         }
-        for(GameStateNode S: searchSpace) {     // remove all below the average
-            if(h_value(S) < avg) {
+        for (GameStateNode S : searchSpace) {     // remove all below the average
+            if (h_value(S) < avg) {
                 searchSpace.remove(S);
             }
         }
-    }
-
-    public int miniMax(GameStateNode node, boolean isMaxPlayer, int alpha, int beta) {
-        //if node is leaf: return value of the node
-        int bestVal = 0;
-        return bestVal;
     }
 
 }
