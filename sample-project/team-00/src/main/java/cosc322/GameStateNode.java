@@ -232,7 +232,7 @@ public class GameStateNode {
 		short i=1;
 		while(position[0]-i>=0 && position[1]+i<=9){
 			if(black){
-				if(nodeBoard.board[position[0]-i][position[1]+i]==0 && minBlack[position[0]+i][position[1]+i]==0){
+				if(nodeBoard.board[position[0]-i][position[1]+i]==0 && minBlack[position[0]-i][position[1]+i]==0){
 					minBlack[position[0]-i][position[1]+i] = (short) (value + (short)1);
 				}
 			}
