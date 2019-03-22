@@ -58,7 +58,6 @@ public class AmazonGameState {
 	
 	public boolean applyMove(short[] QCurr, short[]QNew, short[] ANew) {
             
-            
 		short queenType = board[QCurr[0]][QCurr[1]];               
 		board[QCurr[0]][QCurr[1]] = 0;
 		board[QNew[0]][QNew[1]] = queenType;
@@ -76,7 +75,15 @@ public class AmazonGameState {
 			blackQueens.set(i, new short[]{QNew[0],QNew[1]});
 		}
 		else{
-			i = whiteQueens.indexOf(new short[]{QCurr[0],QCurr[1]});
+			i = -1;
+                        
+			for(int j = 0; j < whiteQueens.size(); j++) {
+                //System.out.println("Compared to Queen index: " + blackQueens.get(j)[0] + ", " + blackQueens.get(j)[1]);
+                if (whiteQueens.get(j)[0] == QCurr[0] && whiteQueens.get(j)[1] == QCurr[1]) {
+                    i = j;
+                }
+            }
+                        
 			whiteQueens.set(i, new short[]{QNew[0],QNew[1]});
                 }
 		//check if legal move, and return false if not?

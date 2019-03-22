@@ -96,12 +96,26 @@ public class Amazons extends GamePlayer{
 		gameStateTree = new ABTree(currentNode, startTime);
 		
 		gameStateTree.createFrontier();
-		//gameStateTree.prune();
-		//gameStateTree.ABSearch();
+		gameStateTree.AlphaBetaHelper();
+		GameStateNode move = gameStateTree.getOptimalMove();
+		System.out.println("Found optimal move");
+		System.out.println("Move queen at " +  + (int) move.QOld[0] + ", "   + (int) move.QOld[1]);
+		System.out.println("To "  + (int)move.QNew[0] + ", "   + (int) move.QNew[1]);
+		System.out.println("Then shoot arrow to " + (int) move.ANew[0] + ", "   + (int) move.ANew[1]);
+		System.out.println("White territory is: " + move.whiteTerritory);
+        System.out.println("Black territory is: " + move.blackTerritory);
+        System.out.println("neutral territory is: " + move.neutral);
+        
+        for(int i = 0; i <= 9; i++) {
+            System.out.println();
+            for(int j = 0; j <= 9; j++) {
+                System.out.print(move.nodeBoard.board[i][j] + " ");
+                
+            }
+       }
 		
 		
-		
-		//gameClient.sendMoveMessage();
+		playerMove((int) move.QNew[0], (int) move.QNew[1], (int) move.ANew[0], (int) move.ANew[1], (int) move.QOld[0], (int) move.QOld[1]);
 		
 		
 	    }
@@ -111,7 +125,7 @@ public class Amazons extends GamePlayer{
 			//turnNumber = 1;
 			currentState = new AmazonGameState(turnNumber, playingAsBlack);
 			GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack, null, null, null);
-                        startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
 			gameStateTree = new ABTree(currentNode, startTime);
 	    	
 	    }
@@ -134,11 +148,22 @@ public class Amazons extends GamePlayer{
 	System.out.println("Arrow: " + arrow);
 
 	board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1), 
-			  qcurr.get(0), qcurr.get(1), true);	
-        
-        startTime = System.currentTimeMillis();
-        
-        gameStateTree.createFrontier();
+			qcurr.get(0), qcurr.get(1), true);	
+    
+	short[] QC = new short[] {(short) qcurr.get(0).intValue(), (short)  qcurr.get(1).intValue()};
+	short[] QN = new short[] {(short) qnew.get(0).intValue(), (short)  qnew.get(1).intValue()};
+	short[] AN = new short[] {(short)  arrow.get(0).intValue(), (short)  arrow.get(1).intValue()};
+
+	
+	turnNumber++;
+    startTime = System.currentTimeMillis();
+    
+    currentState.applyMove(QC, QN, AN);
+    
+    GameStateNode currentNode = new GameStateNode(currentState, turnNumber, true, null, null, null);
+	gameStateTree = new ABTree(currentNode, startTime);
+    
+    gameStateTree.createFrontier();
 		//gameStateTree.prune();
 		//gameStateTree.ABSearch();
 				
@@ -156,7 +181,116 @@ public class Amazons extends GamePlayer{
      * @param qfc queen original col
      */
     public void playerMove(int x, int y, int arow, int acol, int qfr, int qfc){		
-		 
+		
+    	/*y++;
+    	acol++;
+    	qfc++;
+    	
+    	switch(x) {
+    	case 0:
+    		x = 10;
+    		break;
+    	case 1:
+    		x = 9;
+    		break;
+    	case 2:
+    		x = 8;
+    		break;
+    	case 3:
+    		x = 7;
+    		break;
+    	case 4:
+    		x = 6;
+    		break;
+    	case 5:
+    		x = 5;
+    		break;
+    	case 6:
+    		x = 4;
+    		break;
+    	case 7:
+    		x = 3;
+    		break;
+    	case 8:
+    		x = 2;
+    		break;
+    	case 9:
+    		x = 1;
+    		break;
+    	}
+    	switch(qfc) {
+    	case 0:
+    		qfc = 10;
+    		break;
+    	case 1:
+    		qfc = 9;
+    		break;
+    	case 2:
+    		qfc = 8;
+    		break;
+    	case 3:
+    		qfc = 7;
+    		break;
+    	case 4:
+    		qfc = 6;
+    		break;
+    	case 5:
+    		qfc = 5;
+    		break;
+    	case 6:
+    		qfc = 4;
+    		break;
+    	case 7:
+    		qfc = 3;
+    		break;
+    	case 8:
+    		qfc = 2;
+    		break;
+    	case 9:
+    		qfc = 1;
+    		break;
+    	}
+    	switch(acol) {
+    	case 0:
+    		acol = 10;
+    		break;
+    	case 1:
+    		acol = 9;
+    		break;
+    	case 2:
+    		acol = 8;
+    		break;
+    	case 3:
+    		acol = 7;
+    		break;
+    	case 4:
+    		acol = 6;
+    		break;
+    	case 5:
+    		acol = 5;
+    		break;
+    	case 6:
+    		acol = 4;
+    		break;
+    	case 7:
+    		acol = 3;
+    		break;
+    	case 8:
+    		acol = 2;
+    		break;
+    	case 9:
+    		acol = 1;
+    		break;
+    	}*/
+    	
+    	x = 10-x;
+    	y = y+1;
+    	qfr = 10 - qfr;
+    	qfc = qfc+1;
+    	arow = 10-arow;
+    	acol=acol+1;
+    	
+    	
 	int[] qf = new int[2];
 	qf[0] = qfr;
 	qf[1] = qfc;
@@ -168,9 +302,13 @@ public class Amazons extends GamePlayer{
 	int[] ar = new int[2];
 	ar[0] = arow;
 	ar[1] = acol;
+	
+	
+	
+	
 
 	//To send a move message, call this method with the required data  
-	//this.gameClient.sendMoveMessage(qf, qn, ar);
+	this.gameClient.sendMoveMessage(qf, qn, ar);
 	
 	//Task: Replace the above with a timed task to wait for 10 seconds befor sending the move
 	
@@ -397,7 +535,7 @@ public class Amazons extends GamePlayer{
 		  boolean validMove = markPosition(qrow, qcol, arow, acol, qfr, qfc, false); // update itself
 
 		  if(validMove){
-		    game.playerMove(qrow, qcol, arow, acol, qfr, qfc); //to server
+		    //game.playerMove(qrow, qcol, arow, acol, qfr, qfc); //to server
 		  }
 
 		  qrow = 0;
@@ -503,7 +641,7 @@ public class Amazons extends GamePlayer{
      * @param args
      */
     public static void main(String[] args) { 
-	Amazons game01 = new Amazons("player-01", "01");
+	Amazons game01 = new Amazons("Hippolyta", "01");
 	Amazons game02 = new Amazons("player-02", "02");
 	//Amazons game = new Amazons(args[0], args[1]);		
     }
