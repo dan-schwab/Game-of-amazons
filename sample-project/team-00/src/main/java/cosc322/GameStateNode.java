@@ -38,14 +38,24 @@ public class GameStateNode {
                 //System.out.println("White territory is: " + whiteTerritory);
                 //System.out.println("Black territory is: " + blackTerritory);
                 //System.out.println("neutral territory is: " + neutral);
+                
+                for(int i = 0; i <= 9; i++) {
+                    System.out.println();
+                   for(int j = 0; j <= 9; j++) {
+                      System.out.print(nodeBoard.board[i][j] + " ");               
+                   }
+               }
+               System.out.println();
 
-                //for(int i = 0; i <= 9; i++) {
-                //    System.out.println();
-                //    for(int j = 0; j <= 9; j++) {
-                //        System.out.print(this.nodeBoard.board[i][j] + " ");
-                //
-                //    }
-               //}
+                for(int i = 0; i <= 9; i++) {
+                    System.out.println();
+                   for(int j = 0; j <= 9; j++) {
+                      System.out.print(minBlack[i][j] + " ");
+                
+                   }
+               }
+               System.out.println();
+               System.out.println();
                this.value = blackTerritory - whiteTerritory;
 
 
@@ -217,14 +227,24 @@ public class GameStateNode {
 	private void expandLeft(short value, short[] position, boolean black){
 		for(int i=position[1]-1; i>=0; i--){
 			if(black){
-				if(nodeBoard.board[position[0]][i]==0 && minBlack[position[0]][i]==0){
+				if(nodeBoard.board[position[0]][i]==0){
+                                    if(minBlack[position[0]][i]==0){
 					minBlack[position[0]][i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[position[0]][i]==0 && minWhite[position[0]][i]==0){
+				if(nodeBoard.board[position[0]][i]==0){
+                                    if(minWhite[position[0]][i]==0){
 					minWhite[position[0]][i] = (short)(value+(short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 		}
 	}
@@ -232,14 +252,24 @@ public class GameStateNode {
 	private void expandRight(short value, short[] position, boolean black){
 		for(int i=position[1]+1; i<=9; i++){
 			if(black){
-				if(nodeBoard.board[position[0]][i]==0 && minBlack[position[0]][i]==0){
+				if(nodeBoard.board[position[0]][i]==0){
+                                    if(minBlack[position[0]][i]==0){
 					minBlack[position[0]][i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[position[0]][i]==0 && minWhite[position[0]][i]==0){
+				if(nodeBoard.board[position[0]][i]==0){
+                                    if(minWhite[position[0]][i]==0){
 					minWhite[position[0]][i] = (short)(value+(short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 		}
 	}
@@ -247,14 +277,24 @@ public class GameStateNode {
 	private void expandUp(short value, short[] position, boolean black){
 		for(int i=position[0]+1; i<=9; i++){
 			if(black){
-				if(nodeBoard.board[i][position[1]]==0 && minBlack[i][position[1]]==0){
+				if(nodeBoard.board[i][position[1]]==0){
+                                    if(minBlack[i][position[1]]==0){
 					minBlack[i][position[1]] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[i][position[1]]==0 && minWhite[i][position[1]]==0){
+				if(nodeBoard.board[i][position[1]]==0){
+                                    if(minWhite[i][position[1]]==0){
 					minWhite[i][position[1]] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 		}
 	}
@@ -262,14 +302,24 @@ public class GameStateNode {
 	private void expandDown(short value, short[] position, boolean black){
 		for(int i=position[0]-1; i>=0; i--){
 			if(black){
-				if(nodeBoard.board[i][position[1]]==0 && minBlack[i][position[1]]==0){
+				if(nodeBoard.board[i][position[1]]==0){
+                                    if(minBlack[i][position[1]]==0){
 					minBlack[i][position[1]] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[i][position[1]]==0 && minWhite[i][position[1]]==0){
+				if(nodeBoard.board[i][position[1]]==0){
+                                    if(minWhite[i][position[1]]==0){
 					minWhite[i][position[1]] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 		}
 	}
@@ -278,14 +328,24 @@ public class GameStateNode {
 		short i=1;
 		while(position[0]+i<=9 && position[1]+i<=9){
 			if(black){
-				if(nodeBoard.board[position[0]+i][position[1]+i]==0 && minBlack[position[0]+i][position[1]+i]==0){
+				if(nodeBoard.board[position[0]+i][position[1]+i]==0){
+                                    if(minBlack[position[0]+i][position[1]+i]==0){
 					minBlack[position[0]+i][position[1]+i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[position[0]+i][position[1]+i]==0 && minWhite[position[0]+i][position[1]+i]==0){
+				if(nodeBoard.board[position[0]+i][position[1]+i]==0){
+                                    if(minWhite[position[0]+i][position[1]+i]==0){
 					minWhite[position[0]+i][position[1]+i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			i++;
 		}
@@ -295,14 +355,24 @@ public class GameStateNode {
 		short i=1;
 		while(position[0]-i>=0 && position[1]+i<=9){
 			if(black){
-				if(nodeBoard.board[position[0]-i][position[1]+i]==0 && minBlack[position[0]-i][position[1]+i]==0){
+				if(nodeBoard.board[position[0]-i][position[1]+i]==0){
+                                    if(minBlack[position[0]-i][position[1]+i]==0){
 					minBlack[position[0]-i][position[1]+i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[position[0]-i][position[1]+i]==0 && minWhite[position[0]-i][position[1]+i]==0){
+				if(nodeBoard.board[position[0]-i][position[1]+i]==0){
+                                    if(minWhite[position[0]-i][position[1]+i]==0){
 					minWhite[position[0]-i][position[1]+i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			i++;
 		}
@@ -312,14 +382,24 @@ public class GameStateNode {
 		short i=1;
 		while(position[0]+i<=9 && position[1]-i>=0){
 			if(black){
-				if(nodeBoard.board[position[0]+i][position[1]-i]==0 && minBlack[position[0]+i][position[1]-i]==0){
+				if(nodeBoard.board[position[0]+i][position[1]-i]==0){
+                                    if(minBlack[position[0]+i][position[1]-i]==0){
 					minBlack[position[0]+i][position[1]-i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[position[0]+i][position[1]-i]==0 && minWhite[position[0]+i][position[1]-i]==0){
+				if(nodeBoard.board[position[0]+i][position[1]-i]==0){
+                                    if(minWhite[position[0]+i][position[1]-i]==0){
 					minWhite[position[0]+i][position[1]-i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			i++;
 		}
@@ -329,14 +409,24 @@ public class GameStateNode {
 		short i=1;
 		while(position[0]-i>=0 && position[1]-i>=0){
 			if(black){
-				if(nodeBoard.board[position[0]-i][position[1]-i]==0 && minBlack[position[0]-i][position[1]-i]==0){
+				if(nodeBoard.board[position[0]-i][position[1]-i]==0){
+                                    if(minBlack[position[0]-i][position[1]-i]==0){
 					minBlack[position[0]-i][position[1]-i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			else{
-				if(nodeBoard.board[position[0]-i][position[1]-i]==0 && minWhite[position[0]-i][position[1]-i]==0){
+				if(nodeBoard.board[position[0]-i][position[1]-i]==0){
+                                    if(minWhite[position[0]-i][position[1]-i]==0){
 					minWhite[position[0]-i][position[1]-i] = (short) (value + (short)1);
+                                    }
 				}
+                                else{
+                                    return;
+                                }
 			}
 			i++;
 		}
