@@ -104,25 +104,25 @@ public class Amazons extends GamePlayer{
 		gameStateTree.AlphaBetaHelper();
 		GameStateNode move = gameStateTree.getOptimalMove(playingAsBlack);
 
-		System.out.println("Found optimal move");
-		System.out.println("Move queen at " +  + (int) (10-move.QOld[0]) + ", "   + (int) (1+move.QOld[1]));
-		System.out.println("To "  + (int)(10-move.QNew[0]) + ", "   + (int) (1+move.QNew[1]));
-		System.out.println("Then shoot arrow to " + (int) (10-move.ANew[0]) + ", "   + (int) (1+move.ANew[1]));
-		System.out.println("White territory is: " + move.whiteTerritory);
-                System.out.println("Black territory is: " + move.blackTerritory);
-                System.out.println("neutral territory is: " + move.neutral);
+//		System.out.println("Found optimal move");
+//		System.out.println("Move queen at " +  + (int) (10-move.QOld[0]) + ", "   + (int) (1+move.QOld[1]));
+//		System.out.println("To "  + (int)(10-move.QNew[0]) + ", "   + (int) (1+move.QNew[1]));
+//		System.out.println("Then shoot arrow to " + (int) (10-move.ANew[0]) + ", "   + (int) (1+move.ANew[1]));
+//		System.out.println("White territory is: " + move.whiteTerritory);
+//                System.out.println("Black territory is: " + move.blackTerritory);
+//                System.out.println("neutral territory is: " + move.neutral);
                 board.markPosition(10-move.QNew[0], 1+move.QNew[1], 10-move.ANew[0], 1+move.ANew[1], 10-move.QOld[0], 1+move.QOld[1], false);
 		currentState = move.nodeBoard;
 
 
 		System.out.println("Board after black move on turn: " + turnNumber);
-		for(int i = 0; i <= 9; i++) {
-            System.out.println();
-            for(int j = 0; j <= 9; j++) {
-                System.out.print(currentState.board[i][j] + " ");
-
-            }
-       }
+//		for(int i = 0; i <= 9; i++) {
+//            System.out.println();
+//            for(int j = 0; j <= 9; j++) {
+//                System.out.print(currentState.board[i][j] + " ");
+//
+//            }
+//       }
                // try {
     //if(System.currentTimeMillis() - startTime < 20000)
     //    Thread.sleep(2000);
@@ -195,27 +195,27 @@ public class Amazons extends GamePlayer{
 
         long startTime = System.currentTimeMillis();
 
-        System.out.println("Board before applying " + opponent + " move on turn: " + turnNumber);
-		for(int i = 0; i <= 9; i++) {
-            System.out.println();
-            for(int j = 0; j <= 9; j++) {
-                System.out.print(currentState.board[i][j] + " ");
-
-            }
-       }
+//        System.out.println("Board before applying " + opponent + " move on turn: " + turnNumber);
+//		for(int i = 0; i <= 9; i++) {
+//            System.out.println();
+//            for(int j = 0; j <= 9; j++) {
+//                System.out.print(currentState.board[i][j] + " ");
+//
+//            }
+//       }
 
 
     currentState.applyMove(QC, QN, AN);
 
 
     System.out.println("Board after applying " + opponent + " move on turn: " + turnNumber);
-	for(int i = 0; i <= 9; i++) {
-        System.out.println();
-        for(int j = 0; j <= 9; j++) {
-            System.out.print(currentState.board[i][j] + " ");
-
-        }
-   }
+//	for(int i = 0; i <= 9; i++) {
+//        System.out.println();
+//        for(int j = 0; j <= 9; j++) {
+//            System.out.print(currentState.board[i][j] + " ");
+//
+//        }
+//   }
 
 
     GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack, null, null, null, null);
