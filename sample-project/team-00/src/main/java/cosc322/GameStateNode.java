@@ -9,6 +9,7 @@ public class GameStateNode {
 	public int turnNumber;
 	public boolean asBlack;
 	public ArrayList<GameStateNode> children;
+        public GameStateNode parent;
 	public short blackTerritory;
 	public short whiteTerritory;
         public short neutral;
@@ -20,7 +21,7 @@ public class GameStateNode {
     public short[] ANew;
 
 
-	public GameStateNode(AmazonGameState board, int turnNumber, boolean asBlack, short[] QOld, short[] QNew, short[] ANew) {
+	public GameStateNode(AmazonGameState board, int turnNumber, boolean asBlack, short[] QOld, short[] QNew, short[] ANew, GameStateNode parent) {
 		this.nodeBoard = board;
 		this.turnNumber = turnNumber;
 		this.asBlack = asBlack;
@@ -34,28 +35,20 @@ public class GameStateNode {
                 this.ANew = ANew.clone();
                 }
                 this.children = new ArrayList<>();
+                this.parent = parent;
 
                 //System.out.println("White territory is: " + whiteTerritory);
                 //System.out.println("Black territory is: " + blackTerritory);
                 //System.out.println("neutral territory is: " + neutral);
-                
-                for(int i = 0; i <= 9; i++) {
-                    System.out.println();
-                   for(int j = 0; j <= 9; j++) {
-                      System.out.print(nodeBoard.board[i][j] + " ");               
-                   }
-               }
-               System.out.println();
 
-                for(int i = 0; i <= 9; i++) {
-                    System.out.println();
-                   for(int j = 0; j <= 9; j++) {
-                      System.out.print(minBlack[i][j] + " ");
-                
-                   }
-               }
-               System.out.println();
-               System.out.println();
+          //      for(int i = 0; i <= 9; i++) {
+          //          System.out.println();
+           //        for(int j = 0; j <= 9; j++) {
+           //           System.out.print(minBlack[i][j] + " ");
+           //     
+            //       }
+           //    }
+
                this.value = blackTerritory - whiteTerritory;
 
 
@@ -436,7 +429,7 @@ public class GameStateNode {
 
 		ArrayList<GameStateNode> generated = new ArrayList<GameStateNode>();
 
-		if(this.nodeBoard.asBlack) {
+		if(asBlack) {
                     //System.out.println("Number of black queens for this root node is: " + nodeBoard.blackQueens.size());
 			for(int i = 0; i < nodeBoard.blackQueens.size(); i ++) {
 
@@ -450,7 +443,7 @@ public class GameStateNode {
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
 
 
-					AmazonGameState newState = new AmazonGameState(cloneBoard(nodeBoard.board), turnNumber, asBlack,  cloneBlack(nodeBoard.blackQueens), cloneWhite(nodeBoard.whiteQueens));
+					AmazonGameState newState = new AmazonGameState(cloneBoard(nodeBoard.board), turnNumber, !asBlack,  cloneBlack(nodeBoard.blackQueens), cloneWhite(nodeBoard.whiteQueens));
 
                                         for(short[] queen : nodeBoard.blackQueens) {
                                         //System.out.println("Queen index: " + queen + " at " + queen[0] + ", " + queen[1]);
@@ -461,7 +454,7 @@ public class GameStateNode {
 
                                         newState.applyMove(nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 					//System.out.println("Node moves queen from" + nodeBoard.blackQueens.get(i)[0] + ", " + nodeBoard.blackQueens.get(i)[1]);
-					GameStateNode newNode = new GameStateNode(newState, turnNumber++, asBlack, nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
+					GameStateNode newNode = new GameStateNode(newState, turnNumber++, !asBlack, nodeBoard.blackQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k), this);
 					generated.add(newNode);
 
                                 }
@@ -475,7 +468,7 @@ public class GameStateNode {
 		else {
 
 for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
-    System.out.println("Number of white queens for this root node is: " + nodeBoard.whiteQueens.size());
+    //System.out.println("Number of white queens for this root node is: " + nodeBoard.whiteQueens.size());
 
 				ArrayList<short[]> legalQueenMoves = nodeBoard.movesFromSpaceQueen(nodeBoard.whiteQueens.get(i));
 
@@ -485,11 +478,11 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
                                         for(int k = 0; k < legalArrowShots.size(); k++) {
 
 
-					AmazonGameState newState = new AmazonGameState(cloneBoard(nodeBoard.board), turnNumber, asBlack, cloneBlack(nodeBoard.blackQueens), cloneWhite(nodeBoard.whiteQueens));
+					AmazonGameState newState = new AmazonGameState(cloneBoard(nodeBoard.board), turnNumber, !asBlack, cloneBlack(nodeBoard.blackQueens), cloneWhite(nodeBoard.whiteQueens));
                                         //System.out.println("Queen is at: " + nodeBoard.whiteQueens.get(i));
                                         newState.applyMove(nodeBoard.whiteQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
 
-					GameStateNode newNode = new GameStateNode(newState, turnNumber++, asBlack, nodeBoard.whiteQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k));
+					GameStateNode newNode = new GameStateNode(newState, turnNumber++, !asBlack, nodeBoard.whiteQueens.get(i), legalQueenMoves.get(j), legalArrowShots.get(k), this);
 					generated.add(newNode);
 
                                 }
@@ -542,7 +535,7 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 	}
 
     public GameStateNode cloneGameStateNode(GameStateNode input) {
-        GameStateNode node = new GameStateNode(input.nodeBoard, input.turnNumber, input.asBlack, input.QOld, input.QNew, input.ANew);
+        GameStateNode node = new GameStateNode(input.nodeBoard, input.turnNumber, input.asBlack, input.QOld, input.QNew, input.ANew, input.parent);
         node.value = input.value;
         node.turnNumber = input.turnNumber;
         node.blackTerritory = input.blackTerritory;

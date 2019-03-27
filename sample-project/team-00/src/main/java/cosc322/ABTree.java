@@ -154,14 +154,24 @@ public class ABTree {
         if (!searchSpace.isEmpty()) {
             avg = avg / searchSpace.size();
         }
+        
         for (int i = 0; i < searchSpace.size(); i++) {
-            if (searchSpace.get(i).value < avg) {
-                searchSpace.remove(searchSpace.get(i));
+            if(searchSpace.get(i).asBlack){ 
+                if (searchSpace.get(i).value < avg) {
+                    searchSpace.get(i).parent.children.remove(searchSpace.get(i));
+                    searchSpace.remove(searchSpace.get(i));
+                }   
             }
-        }
+            else{
+                if (searchSpace.get(i).value > avg) {
+                    searchSpace.get(i).parent.children.remove(searchSpace.get(i));
+                    searchSpace.remove(searchSpace.get(i));
+                }
+            }
 
 		//System.out.println("Avg heuristic value: " + avg);
 
+        }
     }
 
 
@@ -169,10 +179,12 @@ public class ABTree {
         ArrayList<GameStateNode> nextLayer = new ArrayList<>();
 
                 for (int i = 0; i < searchSpace.size(); i++) {
+                    //temp holding next layer
                     nextLayer.addAll(searchSpace.get(i).createChildren()); }
 
-
+        //clear current layer
         searchSpace.clear();
+        //reinit serach space with next layer
         for (int i = 0; i < nextLayer.size(); i++) {
             // deepCopy in order to keep Object relationships
             GameStateNode newNode = nextLayer.get(i).cloneGameStateNode(nextLayer.get(i));

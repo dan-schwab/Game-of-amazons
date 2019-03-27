@@ -7,8 +7,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.Box;
 import javax.swing.JFrame;
@@ -29,7 +31,9 @@ public class Amazons extends GamePlayer{
     private GameClient gameClient;   
     private JFrame guiFrame = null;    
     private GameBoard board = null; 
-    private boolean gameStarted = false;   
+    private boolean gameStarted = false;
+    private Boolean timeUp = false;
+    public Boolean expansionDone = false;
     public String usrName = null;
     
     private ABTree gameStateTree = null;
@@ -71,6 +75,9 @@ public class Amazons extends GamePlayer{
 	this.gameClient.joinRoom(rooms.get(0));	 		
     }
     
+    public void setTimeUp(){
+        timeUp = true;
+    }
     
     /**
      * Implements the abstract method defined in GamePlayer. Once the user joins a room, 
@@ -92,7 +99,7 @@ public class Amazons extends GamePlayer{
 		currentState = new AmazonGameState(turnNumber, playingAsBlack);
                 
                 
-		GameStateNode currentNode = new GameStateNode(currentState, turnNumber, true, null, null, null);
+		GameStateNode currentNode = new GameStateNode(currentState, turnNumber, true, null, null, null, null);
 		gameStateTree = new ABTree(currentNode, startTime, currentState.asBlack);
 		
 		gameStateTree.createFrontier();                
@@ -138,7 +145,7 @@ public class Amazons extends GamePlayer{
 	    	playingAsBlack = false;
 			//turnNumber = 1;
 			currentState = new AmazonGameState(turnNumber, playingAsBlack);
-			GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack, null, null, null);
+			GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack, null, null, null, null);
             //startTime = System.currentTimeMillis();
 			gameStateTree = new ABTree(currentNode, startTime, playingAsBlack);
 	    	
@@ -182,30 +189,32 @@ public class Amazons extends GamePlayer{
    // }
 	
 	turnNumber++;
-    startTime = System.currentTimeMillis();
-    
+        long startTime = System.currentTimeMillis();
+        
     currentState.applyMove(QC, QN, AN);
     
-    GameStateNode currentNode = new GameStateNode(currentState, turnNumber, currentState.asBlack, null, null, null);
+    GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack, null, null, null, null);
 	gameStateTree = new ABTree(currentNode, startTime, currentState.asBlack);
     
 	turnNumber++;
     
     gameStateTree.createFrontier();
-    if(turnNumber > 40) {
-        System.out.println("Expanding before: " + gameStateTree.searchSpace.size());
-                gameStateTree.expandDeeper();
-                System.out.println("Expanding afer: " + gameStateTree.searchSpace.size());
-                }
-    if(turnNumber > 60) {
-        System.out.println("Expanding before: " + gameStateTree.searchSpace.size());
-                gameStateTree.expandDeeper();
-                System.out.println("Expanding afer: " + gameStateTree.searchSpace.size());
-                }
-	gameStateTree.AlphaBetaHelper();
-        GameStateNode move = gameStateTree.getOptimalMove();
-
-	
+    gameStateTree.AlphaBetaHelper();
+    GameStateNode move = gameStateTree.getOptimalMove();
+    Thread exThread = new Thread(new Expander(gameStateTree, this));
+    exThread.start();
+    while(System.currentTimeMillis()-startTime<25000){
+        if(expansionDone){
+            expansionDone = false;
+            gameStateTree.AlphaBetaHelper();
+            move = gameStateTree.getOptimalMove();
+            exThread = new Thread(new Expander(gameStateTree, this));
+            exThread.start();
+        }
+    }
+    exThread.stop();
+    
+    
 	if(move == null) {
 		System.out.println("Game over");
 	} else {
@@ -713,3 +722,32 @@ public class Amazons extends GamePlayer{
 	//Amazons game = new Amazons(args[0], args[1]);		
     }
 }//end of Amazon
+
+class Expander implements Runnable{
+   
+    ABTree gameTree;
+    Amazons a;
+    
+    public Expander(ABTree gameTree, Amazons a){
+        this.gameTree = gameTree;
+        this.a = a;
+    }
+    
+    public void run(){
+        gameTree.expandDeeper();
+        a.expansionDone = true;
+    }
+}
+
+class MyTimerTask extends TimerTask {
+    
+    Amazons a;
+  
+    public MyTimerTask(Amazons a){
+        this.a = a;
+    }
+    @Override
+    public void run(){
+        a.setTimeUp();
+    }
+}
