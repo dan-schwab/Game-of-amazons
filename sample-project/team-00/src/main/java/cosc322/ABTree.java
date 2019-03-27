@@ -25,12 +25,12 @@ public class ABTree {
 
                for(int level = 1; level < depth && (System.currentTimeMillis() - startTime < 20000); level++) {
                  System.out.println("calling ab search at level " + level + " with time " + (System.currentTimeMillis() - startTime));
-		ABSearch(rootNode, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		ABSearch(rootNode, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, rootNode.asBlack);
                 }
 	}
 
 
-	public int ABSearch(GameStateNode node, int depth, int alpha, int beta) {
+	public int ABSearch(GameStateNode node, int depth, int alpha, int beta, boolean maximizing) {
 
 		if(depth == 0 || node.children.isEmpty()) {
 			node.value = node.value;
@@ -38,37 +38,46 @@ public class ABTree {
 			return node.value;
 		}
 		//System.out.println("dpeth level > 0, children: " + node.children.size());
-		for(GameStateNode child : node.children) {
+		
+		if(maximizing) {
+			
+			int currentScore = Integer.MIN_VALUE;
+			
+			for(GameStateNode child : node.children) {
 
-			int currentScore = ABSearch(child, depth-1, alpha, beta);
-
-			if(node.asBlack) {
-
+			currentScore = Math.max(currentScore, ABSearch(child, depth-1, alpha, beta, false));
+			
 			alpha = Math.max(alpha, currentScore);
 			if(alpha >= beta) break;
-			}
-			else {
-				beta = Math.min(beta, currentScore);
-				if(beta <= alpha) break;
-			}
 
-		}
-
-		if(node.asBlack) {
-			node.value = alpha;
+			}
+			
+			return node.value;
+			
 		}
 		else {
-			node.value = beta;
+			
+			int currentScore = Integer.MAX_VALUE;
+			
+			for(GameStateNode child : node.children) {
+
+			currentScore = Math.min(currentScore, ABSearch(child, depth-1, alpha, beta, true));
+			
+			beta = Math.min(beta, currentScore);
+			if(alpha >= beta) break;
+
+			}
+			
+			return node.value;
+			
 		}
-		//System.out.println("Returning Value " + node.value);
-		return node.value;
 
 	}
 
-	public GameStateNode getOptimalMove() {
+	public GameStateNode getOptimalMove(boolean black) {
 
             GameStateNode optimal = null;
-		if(asBlack) {
+		if(black) {
                     return getOptimalMoveBlack();
                 }
                 else {

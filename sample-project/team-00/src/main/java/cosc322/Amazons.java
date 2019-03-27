@@ -23,46 +23,46 @@ import ygraphs.ai.smart_fox.games.GameModel;
 import ygraphs.ai.smart_fox.games.GamePlayer;
 
 /**
- * For testing and demo purposes only. An GUI Amazon client for human players 
+ * For testing and demo purposes only. An GUI Amazon client for human players
  * @author yong.gao@ubc.ca
  */
 public class Amazons extends GamePlayer{
 
-    private GameClient gameClient;   
-    private JFrame guiFrame = null;    
-    private GameBoard board = null; 
+    private GameClient gameClient;
+    private JFrame guiFrame = null;
+    private GameBoard board = null;
     private boolean gameStarted = false;
     private Boolean timeUp = false;
     public Boolean expansionDone = false;
     public String usrName = null;
-    
+
     private ABTree gameStateTree = null;
     int turnNumber = 0;
     private AmazonGameState currentState = null;
     boolean playingAsBlack;
-    
+
     public long startTime;
-            
-    
+
+
     /**
      * Constructor
      * @param name
      * @param passwd
      */
-    public Amazons(String name, String passwd){  
-	
-       this.usrName = name;		       	   
-       setupGUI();       
-                     
-       connectToServer(name, passwd);        
+    public Amazons(String name, String passwd){
+
+       this.usrName = name;
+       setupGUI();
+
+       connectToServer(name, passwd);
     }
-	
+
     private void connectToServer(String name, String passwd){
     	// create a GameClient and use "this" class (a GamePlayer) as the delegate.
     	// the client will take care of the communication with the server.
-    	gameClient = new GameClient(name, passwd, this);	
+    	gameClient = new GameClient(name, passwd, this);
     }
-    
+
     @Override
     /**
      * Implements the abstract method defined in GamePlayer. Will be invoked by the GameClient
@@ -70,29 +70,29 @@ public class Amazons extends GamePlayer{
      */
     public void onLogin() {
 
-	//once logged in, the gameClient will have  the names of available game rooms  
+	//once logged in, the gameClient will have  the names of available game rooms
 	ArrayList<String> rooms = gameClient.getRoomList();
-	this.gameClient.joinRoom(rooms.get(0));	 		
+	this.gameClient.joinRoom(rooms.get(0));
     }
-    
+
     public void setTimeUp(){
         timeUp = true;
     }
-    
+
     /**
-     * Implements the abstract method defined in GamePlayer. Once the user joins a room, 
+     * Implements the abstract method defined in GamePlayer. Once the user joins a room,
      * all the game-related messages will be forwarded to this method by the GameClient.
-     * 
-     * See GameMessage.java 
-     * 
+     *
+     * See GameMessage.java
+     *
      * @param messageType - the type of the message
-     * @param msgDetails - A HashMap info and data about a game action     
+     * @param msgDetails - A HashMap info and data about a game action
      */
     public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails){
-		
-	if(messageType.equals(GameMessage.GAME_ACTION_START)){	 
+
+	if(messageType.equals(GameMessage.GAME_ACTION_START)){
 	    if(((String) msgDetails.get("player-black")).equals(this.userName())){
-		System.out.println("Game State: " +  msgDetails.get("player-black" ) + " Playing as white");
+		System.out.println("Game State: " +  msgDetails.get("player-black" ) + " Playing as black");
 		playingAsBlack = true;
 		turnNumber = 1;
                 guiFrame.setTitle("Turn: " + turnNumber);
@@ -100,10 +100,10 @@ public class Amazons extends GamePlayer{
 		currentState = new AmazonGameState(turnNumber, playingAsBlack);
 		GameStateNode currentNode = new GameStateNode(currentState, turnNumber, true, null, null, null, null);
 		gameStateTree = new ABTree(currentNode, startTime, currentState.asBlack);
-		gameStateTree.createFrontier();                
+		gameStateTree.createFrontier();
 		gameStateTree.AlphaBetaHelper();
-		GameStateNode move = gameStateTree.getOptimalMove();
-		
+		GameStateNode move = gameStateTree.getOptimalMove(playingAsBlack);
+
 		System.out.println("Found optimal move");
 		System.out.println("Move queen at " +  + (int) (10-move.QOld[0]) + ", "   + (int) (1+move.QOld[1]));
 		System.out.println("To "  + (int)(10-move.QNew[0]) + ", "   + (int) (1+move.QNew[1]));
@@ -113,22 +113,32 @@ public class Amazons extends GamePlayer{
                 System.out.println("neutral territory is: " + move.neutral);
                 board.markPosition(10-move.QNew[0], 1+move.QNew[1], 10-move.ANew[0], 1+move.ANew[1], 10-move.QOld[0], 1+move.QOld[1], false);
 		currentState = move.nodeBoard;
+
+
+		System.out.println("Board after black move on turn: " + turnNumber);
+		for(int i = 0; i <= 9; i++) {
+            System.out.println();
+            for(int j = 0; j <= 9; j++) {
+                System.out.print(currentState.board[i][j] + " ");
+
+            }
+       }
                // try {
     //if(System.currentTimeMillis() - startTime < 20000)
     //    Thread.sleep(2000);
     //} catch(Exception e){};
-//    board.markPosition(10-move.QNew[0], 1+move.QNew[1], 10-move.ANew[0], 1+move.ANew[1], 
+//    board.markPosition(10-move.QNew[0], 1+move.QNew[1], 10-move.ANew[0], 1+move.ANew[1],
 //			10-move.QOld[0], 1+move.QOld[1], true);
-    
+
     //for(int i = 0; i < currentState.blackQueens.size();i++) {
     //    System.out.println("Black queen " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
     //}for(int i = 0; i < currentState.whiteQueens.size();i++) {
     //    System.out.println("White queen " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
    // }
-    
+
 		playerMove((int) move.QNew[0], (int) move.QNew[1], (int) move.ANew[0], (int) move.ANew[1], (int) move.QOld[0], (int) move.QOld[1]);
-		
-		
+
+
 	    }
 	    else if(((String) msgDetails.get("player-white")).equals(this.userName())) {
 	    	System.out.println("Game State: " +  msgDetails.get("player-white") + " Playing as white");
@@ -138,17 +148,17 @@ public class Amazons extends GamePlayer{
 			GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack, null, null, null, null);
             //startTime = System.currentTimeMillis();
 			gameStateTree = new ABTree(currentNode, startTime, playingAsBlack);
-	    	
+
 	    }
 	}
 	else if(messageType.equals(GameMessage.GAME_ACTION_MOVE)){
 	    handleOpponentMove(msgDetails);
 	}
-	
+
 	return true;
     }
-    
-    //handle the event that the opponent makes a move. 
+
+    //handle the event that the opponent makes a move.
     private void handleOpponentMove(Map<String, Object> msgDetails){
         turnNumber++;
         guiFrame.setTitle("Turn: " + turnNumber);
@@ -160,18 +170,19 @@ public class Amazons extends GamePlayer{
 	System.out.println("QCurr: " + qcurr);
 	System.out.println("QNew: " + qnew);
 	System.out.println("Arrow: " + arrow);
-        
-        
-        
-	board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1), 
-			qcurr.get(0), qcurr.get(1), true);	
-        
-//        for(int i = 0; i < currentState.blackQueens.size();i++) {
-//        System.out.println("Black queen " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
-//    }for(int i = 0; i < currentState.whiteQueens.size();i++) {
-//        System.out.println("White queen " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
-//    }
-    
+
+	String player = playingAsBlack ? "black" : "white";
+	String opponent = !playingAsBlack ? "black" : "white";
+
+	board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1),
+			qcurr.get(0), qcurr.get(1), true);
+
+        //for(int i = 0; i < currentState.blackQueens.size();i++) {
+        //System.out.println("Black queen " + currentState.blackQueens.get(i)[0] + ", " + currentState.blackQueens.get(i)[1]);
+    //}for(int i = 0; i < currentState.whiteQueens.size();i++) {
+    //    System.out.println("White queen " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
+    //}
+
 	short[] QC = new short[] {(short) (10-qcurr.get(0).intValue()), (short)  (qcurr.get(1).intValue()-1)};
 	short[] QN = new short[] {(short) (10-qnew.get(0).intValue()), (short)  (qnew.get(1).intValue()-1)};
 	short[] AN = new short[] {(short)  (10-arrow.get(0).intValue()), (short) (arrow.get(1).intValue()-1)};
@@ -181,35 +192,56 @@ public class Amazons extends GamePlayer{
    // }for(int i = 0; i < currentState.whiteQueens.size();i++) {
    //     System.out.println("White queen post move " + currentState.whiteQueens.get(i)[0] + ", " + currentState.whiteQueens.get(i)[1]);
    // }
-	
+
         long startTime = System.currentTimeMillis();
-        
+
+        System.out.println("Board before applying " + opponent + " move on turn: " + turnNumber);
+		for(int i = 0; i <= 9; i++) {
+            System.out.println();
+            for(int j = 0; j <= 9; j++) {
+                System.out.print(currentState.board[i][j] + " ");
+
+            }
+       }
+
+
     currentState.applyMove(QC, QN, AN);
-    
+
+
+    System.out.println("Board after applying " + opponent + " move on turn: " + turnNumber);
+	for(int i = 0; i <= 9; i++) {
+        System.out.println();
+        for(int j = 0; j <= 9; j++) {
+            System.out.print(currentState.board[i][j] + " ");
+
+        }
+   }
+
+
     GameStateNode currentNode = new GameStateNode(currentState, turnNumber, playingAsBlack, null, null, null, null);
 	gameStateTree = new ABTree(currentNode, startTime, currentState.asBlack);
-    
+
 	turnNumber++;
-    
+
     gameStateTree.createFrontier();
     gameStateTree.AlphaBetaHelper();
-    GameStateNode move = gameStateTree.getOptimalMove();
+    GameStateNode move = gameStateTree.getOptimalMove(playingAsBlack);
     Thread exThread = new Thread(new Expander(gameStateTree, this));
     exThread.start();
     while(System.currentTimeMillis()-startTime<25000){
         if(expansionDone){
             expansionDone = false;
             gameStateTree.AlphaBetaHelper();
-            move = gameStateTree.getOptimalMove();
+            move = gameStateTree.getOptimalMove(playingAsBlack);
             exThread = new Thread(new Expander(gameStateTree, this));
             exThread.start();
         }
     }
     exThread.stop();
-    
-    
+
+
 	if(move == null) {
-		System.out.println("Game over");
+		System.out.println("Game over, we lose");
 	} else {
 //	System.out.println("Found optimal move");
 //	System.out.println("Move queen at " +  + (int) move.QOld[0] + ", "   + (int) move.QOld[1]);
@@ -220,43 +252,43 @@ public class Amazons extends GamePlayer{
 //    System.out.println("neutral territory is: " + move.neutral);
             board.markPosition(10-move.QNew[0], 1+move.QNew[1], 10-move.ANew[0], 1+move.ANew[1], 10-move.QOld[0], 1+move.QOld[1], false);
 		currentState = move.nodeBoard;
-    
+
 //    for(int i = 0; i <= 9; i++) {
 //        System.out.println();
 //        for(int j = 0; j <= 9; j++) {
 //            System.out.print(move.nodeBoard.board[i][j] + " ");
-//            
+//
 //        }
 //   }
-	
+
     currentState = move.nodeBoard;
     //try {
     //if(System.currentTimeMillis() - startTime < 20000)
     //    Thread.sleep(2000);
     //} catch(Exception e){};
 	playerMove((int) move.QNew[0], (int) move.QNew[1], (int) move.ANew[0], (int) move.ANew[1], (int) move.QOld[0], (int) move.QOld[1]);
-	
+
 		//gameStateTree.ABSearch();
-        }			
+        }
 		//gameClient.sendMoveMessage();
     }
-	
-	
+
+
     /**
      * handle a move made by this player --- send the info to the server.
-     * @param x queen row index 
+     * @param x queen row index
      * @param y queen col index
      * @param arow arrow row index
      * @param acol arrow col index
      * @param qfr queen original row
      * @param qfc queen original col
      */
-    public void playerMove(int x, int y, int arow, int acol, int qfr, int qfc){		
-		
+    public void playerMove(int x, int y, int arow, int acol, int qfr, int qfc){
+
     	/*y++;
     	acol++;
     	qfc++;
-    	
+
     	switch(x) {
     	case 0:
     		x = 10;
@@ -353,15 +385,15 @@ public class Amazons extends GamePlayer{
     		acol = 1;
     		break;
     	}*/
-    	
+
     	x = 10-x;
     	y = y+1;
     	qfr = 10 - qfr;
     	qfc = qfc+1;
     	arow = 10-arow;
     	acol=acol+1;
-    	
-    	
+
+
 	int[] qf = new int[2];
 	qf[0] = qfr;
 	qf[1] = qfc;
@@ -373,57 +405,57 @@ public class Amazons extends GamePlayer{
 	int[] ar = new int[2];
 	ar[0] = arow;
 	ar[1] = acol;
-	
-	
-	
-	
 
-	//To send a move message, call this method with the required data  
+
+
+
+
+	//To send a move message, call this method with the required data
 	this.gameClient.sendMoveMessage(qf, qn, ar);
-	
+
 	//Task: Replace the above with a timed task to wait for 10 seconds befor sending the move
-	
+
     }
-	  
+
     //set up the game board
     private void setupGUI(){
 	    guiFrame = new JFrame();
-		   
+
 		guiFrame.setSize(800, 600);
-		guiFrame.setTitle("Game of the Amazons (COSC 322, )" + this.userName());	
-		
+		guiFrame.setTitle("Game of the Amazons (COSC 322, )" + this.userName());
+
 		guiFrame.setLocation(200, 200);
 		guiFrame.setVisible(true);
-	    guiFrame.repaint();		
+	    guiFrame.repaint();
 		guiFrame.setLayout(null);
-		
+
 		Container contentPane = guiFrame.getContentPane();
 		contentPane.setLayout(new  BorderLayout());
-		 
-		contentPane.add(Box.createVerticalGlue()); 
-		
-		board = createGameBoard();		
+
+		contentPane.add(Box.createVerticalGlue());
+
+		board = createGameBoard();
 		contentPane.add(board,  BorderLayout.CENTER);
     }
-    
+
     private GameBoard createGameBoard(){
 	return new GameBoard(this);
-    }	
-		
+    }
+
     public boolean handleMessage(String msg) {
-	System.out.println("Time Out ------ " + msg); 
+	System.out.println("Time Out ------ " + msg);
 	return true;
     }
 
     @Override
-    public String userName() { 
+    public String userName() {
 	return usrName;
     }
-	
+
 
     /**
      * The game board
-     * 
+     *
      * @author yongg
      *
      */
@@ -431,11 +463,11 @@ public class Amazons extends GamePlayer{
 
 	    private static final long serialVersionUID = 1L;
 	    private  int rows = 10;
-	    private  int cols = 10; 
+	    private  int cols = 10;
 
 	    int width = 500;
 	    int height = 500;
-	    int cellDim = width / 10; 
+	    int cellDim = width / 10;
 	    int offset = width / 20;
 
 	    int posX = -1;
@@ -445,19 +477,19 @@ public class Amazons extends GamePlayer{
 	    int c = 0;
 
 
-	    Amazons game = null; 
+	    Amazons game = null;
 	private BoardGameModel gameModel = null;
 
 	    boolean playerAMove;
 
 	    public GameBoard(Amazons game){
-	    this.game = game;	       
+	    this.game = game;
 	    gameModel = new BoardGameModel(this.rows + 1, this.cols + 1);
 
 	    //if(!game.isGamebot){
 		    addMouseListener(new  GameEventHandler());
 	    //}
-	    init(true);	
+	    init(true);
 	    }
 
 
@@ -470,33 +502,33 @@ public class Amazons extends GamePlayer{
 
 	    gameModel.gameBoard[1][4] = tagW;
 	    gameModel.gameBoard[1][7] = tagW;
-	    gameModel.gameBoard[3][1] = tagW;
-	    gameModel.gameBoard[3][10] = tagW;
+	    gameModel.gameBoard[4][1] = tagW;
+	    gameModel.gameBoard[4][10] = tagW;
 
-	    gameModel.gameBoard[8][1] = tagB;
-	    gameModel.gameBoard[8][10] = tagB;
+	    gameModel.gameBoard[7][1] = tagB;
+	    gameModel.gameBoard[7][10] = tagB;
 	    gameModel.gameBoard[10][4] = tagB;
-	    gameModel.gameBoard[10][7] = tagB;		
+	    gameModel.gameBoard[10][7] = tagB;
 	    }
 
 
 	    /**
 	     * repaint the part of the board
 	     * @param qrow queen row index
-	     * @param qcol queen col index 
+	     * @param qcol queen col index
 	     * @param arow arrow row index
      * @param acol arrow col index
      * @param qfr queen original row
      * @param qfc queen original col
 	     */
-	    public boolean markPosition(int qrow, int qcol, int arow, int acol, 
-			      int qfr, int qfc, boolean  opponentMove){						
+	    public boolean markPosition(int qrow, int qcol, int arow, int acol,
+			      int qfr, int qfc, boolean  opponentMove){
 
-		    System.out.println(qrow + ", " + qcol + ", " + arow + ", " + acol 
+		    System.out.println(qrow + ", " + qcol + ", " + arow + ", " + acol
 				    + ", " + qfr + ", " + qfc);
 
 		    boolean valid = gameModel.positionMarked(qrow, qcol, arow, acol, qfr, qfc, opponentMove);
-		    repaint();						
+		    repaint();
 		    return valid;
 	    }
 
@@ -506,7 +538,7 @@ public class Amazons extends GamePlayer{
 
 		    for(int i = 0; i < rows + 1; i++){
 			    g.drawLine(i * cellDim + offset, offset, i * cellDim + offset, rows * cellDim + offset);
-			    g.drawLine(offset, i*cellDim + offset, cols * cellDim + offset, i*cellDim + offset);					 
+			    g.drawLine(offset, i*cellDim + offset, cols * cellDim + offset, i*cellDim + offset);
 		    }
 
 		    for(int r = 0; r < rows; r++){
@@ -518,13 +550,13 @@ public class Amazons extends GamePlayer{
 				    posY = (9 - r) * cellDim + offset;
 
 			    if(gameModel.gameBoard[r + 1][c + 1].equalsIgnoreCase(BoardGameModel.POS_AVAILABLE)){
-				    g.clearRect(posX + 1, posY + 1, 49, 49);					
+				    g.clearRect(posX + 1, posY + 1, 49, 49);
 			    }
 
 			    if(gameModel.gameBoard[r + 1][c + 1].equalsIgnoreCase(
 					      BoardGameModel.POS_MARKED_BLACK)){
 				    g.fillOval(posX, posY, 50, 50);
-			    } 
+			    }
 			    else if(gameModel.gameBoard[r + 1][c + 1].equalsIgnoreCase(
 				      BoardGameModel.POS_MARKED_ARROW)) {
 				    g.clearRect(posX + 1, posY + 1, 49, 49);
@@ -546,7 +578,7 @@ public class Amazons extends GamePlayer{
 
 	    /**
 	     * Handle mouse events
-	     * 
+	     *
 	     * @author yongg
 	     */
 	    public class GameEventHandler extends MouseAdapter{
@@ -560,12 +592,12 @@ public class Amazons extends GamePlayer{
 			int qfc = 0;
 
 			int arow = 0;
-			int acol = 0; 
+			int acol = 0;
 
 		public void mousePressed(MouseEvent e) {
 
 		    if(!gameStarted){
-			    //return; 
+			    //return;
 		    }
 
 		int x = e.getX();
@@ -576,7 +608,7 @@ public class Amazons extends GamePlayer{
 		    return;
 		}
 
-		int row = (y - offset) / cellDim + 1;                        
+		int row = (y - offset) / cellDim + 1;
 		int col = (x - offset) / cellDim + 1;
 
 		if(counter == 0){
@@ -602,7 +634,7 @@ public class Amazons extends GamePlayer{
 		}
 
 		if(counter == 3){
-		  counter = 0; 	
+		  counter = 0;
 		  boolean validMove = markPosition(qrow, qcol, arow, acol, qfr, qfc, false); // update itself
 
 		  if(validMove){
@@ -615,10 +647,10 @@ public class Amazons extends GamePlayer{
 		  acol = 0;
 
 		}
-		}			 
-	     }//end of GameEventHandler		
+		}
+	     }//end of GameEventHandler
 
-    }//end of GameBoard  
+    }//end of GameBoard
 
     class BoardGameModel extends GameModel {
 
@@ -626,17 +658,17 @@ public class Amazons extends GamePlayer{
 	public static final String POS_MARKED_WHITE = "white";
 	public static final String POS_MARKED_ARROW = "arrow";
 	public static final String POS_AVAILABLE = "available";
-	
-	String[][] gameBoard = null; 
+
+	String[][] gameBoard = null;
 	//int[][] posScores = null;
-	
-	
+
+
 	/**
 	 * @param rows
 	 * @param columns
 	 */
 	public BoardGameModel(int rows, int columns){
-		
+
 		gameBoard = new String[rows + 1][columns + 1];
 		//posScores = new int[rows][columns];
 		for(int i = 1; i < rows + 1; i++){
@@ -646,33 +678,33 @@ public class Amazons extends GamePlayer{
 			}
 		}
 	}
-	
-	
+
+
 	public boolean positionMarked(int row, int column, int arow, int acol,
 			 int qfr, int qfc, boolean opponentMove){
 		boolean valid = true;
-		
- 
-		
-		if(row >= gameBoard.length | column >= gameBoard.length 
+
+
+
+		if(row >= gameBoard.length | column >= gameBoard.length
 				 || row <= 0 || column <= 0){
 			valid = false;
 		}
 		else if (!gameBoard[row][column].equalsIgnoreCase(BoardGameModel.POS_AVAILABLE)){
 			valid = false;
 		}
-        
+
 		if(valid){
-			gameBoard[row][column] = gameBoard[qfr][qfc];		
-			gameBoard[qfr][qfc] = BoardGameModel.POS_AVAILABLE;		
+			gameBoard[row][column] = gameBoard[qfr][qfc];
+			gameBoard[qfr][qfc] = BoardGameModel.POS_AVAILABLE;
 			gameBoard[arow][acol] = BoardGameModel.POS_MARKED_ARROW;
 		}
-		
+
 		//System.out.println(this.toString());
-		
+
 		return valid;
-	}	
-	
+	}
+
 	public String toString(){
       String b = null;
 
@@ -681,53 +713,53 @@ public class Amazons extends GamePlayer{
 		b = b + gameBoard[i][j] + " ";
 	      }
 	      b = b + "\n";
-      }  	  
+      }
       return b;
-    }	
     }
-	
+    }
+
     class MyTimer extends TimerTask{
 	GameClient gameClient = null;
 	int[] qf;
 	int[] qn;
 	int[] ar;
-	
-	public MyTimer(GameClient gameClient, int[] qf, int[] qn, int[] ar){	
+
+	public MyTimer(GameClient gameClient, int[] qf, int[] qn, int[] ar){
 	    this.gameClient = gameClient;
 	    this.qf = qf;
 	    this.qn = qn;
 	    this.ar = ar;
 	}
-		
+
 	/**
-	 * send the move 
+	 * send the move
 	 */
 	public void run() {
 		gameClient.sendMoveMessage(qf, qn, ar);
 	}
     }
-    
+
     /**
-     * Constructor 
+     * Constructor
      * @param args
      */
-    public static void main(String[] args) { 
+    public static void main(String[] args) {
 	Amazons game01 = new Amazons("Hippolyta", "01");
 	Amazons game02 = new Amazons("player-02", "02");
-	//Amazons game = new Amazons(args[0], args[1]);		
+	//Amazons game = new Amazons(args[0], args[1]);
     }
 }//end of Amazon
 
 class Expander implements Runnable{
-   
+
     ABTree gameTree;
     Amazons a;
-    
+
     public Expander(ABTree gameTree, Amazons a){
         this.gameTree = gameTree;
         this.a = a;
     }
-    
+
     public void run(){
         gameTree.expandDeeper();
         a.expansionDone = true;
@@ -735,9 +767,9 @@ class Expander implements Runnable{
 }
 
 class MyTimerTask extends TimerTask {
-    
+
     Amazons a;
-  
+
     public MyTimerTask(Amazons a){
         this.a = a;
     }
