@@ -40,6 +40,9 @@ public class AmazonGameState {
 
 	public boolean applyMove(ArrayList<Integer> QCurr, ArrayList<Integer> QNew, ArrayList<Integer> ANew) {
 		short queenType = board[QCurr.get(0)][QCurr.get(1)];
+		if(queenType == 0 || queenType == 3) {
+			System.out.println("INVALID MOVE DETECTED, TRYING TO MOVE NON-EXISTENT QUEEN");
+		}
 		board[QCurr.get(0)][QCurr.get(1)] = 0;
 		board[QNew.get(0)][QNew.get(1)] = queenType;
 		board[ANew.get(0)][ANew.get(1)] = 3;

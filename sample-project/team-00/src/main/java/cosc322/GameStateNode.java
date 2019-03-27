@@ -492,7 +492,7 @@ for(int i = 0; i < nodeBoard.whiteQueens.size(); i ++) {
 
 		}
 
-		System.out.println("Number of moves for this root node is: " + generated.size());
+		//System.out.println("Number of moves for this root node is: " + generated.size());
 		this.children = generated;
 		return generated;
 
